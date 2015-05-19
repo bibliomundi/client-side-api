@@ -1,0 +1,18 @@
+<component name="InspectionProjectProfileManager">
+  <profile version="1.0" is_locked="false">
+    <option name="myName" value="Project Default" />
+    <option name="myLocal" value="false" />
+    <inspection_tool class="PhpDeprecationInspection" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="PhpDivisionByZeroInspection" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="PhpDocMissingReturnTagInspection" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="PhpDocMissingThrowsInspection" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="PhpDocSignatureInspection" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="PhpDynamicAsStaticMethodCallInspection" enabled="true" level="ERROR" enabled_by_default="true" />
+    <inspection_tool class="PhpMissingBreakStatementInspection" enabled="true" level="ERROR" enabled_by_default="true" />
+    <inspection_tool class="PhpMissingDocCommentInspection" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="PhpMultipleClassesDeclarationsInOneFile" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="PhpRedundantClosingTagInspection" enabled="true" level="INFO" enabled_by_default="true" />
+    <inspection_tool class="PhpUnreachableStatementInspection" enabled="true" level="WEAK WARNING" enabled_by_default="true" />
+    <inspection_tool class="PhpWrongCatchClausesOrderInspection" enabled="true" level="WEAK WARNING" enabled_by_default="true" />
+  </profile>
+</component>
