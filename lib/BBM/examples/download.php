@@ -6,11 +6,13 @@
  * Time: 6:36 PM
  */
 
-$download = new BBM\Download('CLIENT_ID', 'CLIENT_SECRET');
+$download = new BBM\Download('testeclient', 'testeclient');
 
-// PEGA O HASH PASSANDO O ID DA COMPRA
-$purchase_id = 100;
-$hash = $download->getHash($purchase_id);
+$data = [
+    'ebook_id' => 48,
+    'transaction_time' => 1433185687,
+    'transaction_key' => 'chaveTransacaoTeste'
+];
 
-if($download->validate($hash))
-    $download->download();
+if($download->validate($data))
+    echo $download->download();

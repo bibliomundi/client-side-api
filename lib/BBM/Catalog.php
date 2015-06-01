@@ -8,7 +8,7 @@
 
 namespace BBM;
 
-use BBM\Server;
+use BBM\Server\Connect;
 
 class Catalog extends Connect {
 

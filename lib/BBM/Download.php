@@ -8,67 +8,86 @@
 
 namespace BBM;
 
-use BBM\Server;
+use BBM\Server\Connect;
 use BBM\Server\Exception;
 
 /**
  * Class Download
  * @package BBM
  */
-class Download extends Connect {
+class Download extends Connect
+{
+    private $clientId;
+    private $clientSecret;
+    private $data;
 
-    public function getHash($purchase_id)
+    public function __construct($clientId, $clientSecret)
     {
-        $request = new Server\Request(Server\Config\SysConfig::$BASE_CONNECT_URI . Server\Config\SysConfig::$BASE_DOWNLOAD . 'getHash');
-        $request->build(array('purchase_id' => $purchase_id));
+        if(strlen($clientId) > 32 || strlen($clientSecret) > 32)
+            throw new Exception('Invalid Credentials', 400);
 
-        try
-        {
-            $request->send();
-        }
-        catch(Exception $e)
-        {
-            // DEBUG -> $request->getErrors();
-            throw new Exception($request->getErrors(), $e->getCode());
-        }
-
-        return $request->getResponse();
+        $this->clientId = $clientId;
+        $this->clientSecret = $clientSecret;
     }
 
-    public function validate($hash)
+    public function validate(Array $data)
     {
-        $request = new Server\Request(Server\Config\SysConfig::$BASE_CONNECT_URI . Server\Config\SysConfig::$BASE_DOWNLOAD . 'validate');
-        $request->build(array('hash' => $hash));
+        $this->data = $data;
 
         try
         {
-            $request->send();
+            $this->validateData();
+
+            $request = new Server\Request(Server\Config\SysConfig::$BASE_CONNECT_URI . 'token.php');
+            $request->authenticate(true, $this->clientId, $this->clientSecret);
+            $request->setPost(['grant_type' => Server\Config\SysConfig::$GRANT_TYPE]);
+            $request->create();
+            $response = json_decode($request->execute());
+
+            $this->data['access_token'] = $response->access_token;
         }
         catch(Exception $e)
         {
-            // DEBUG -> $request->getErrors();
-            throw new Exception($request->getErrors(), $e->getCode());
+            throw $e;
         }
 
-        return $request->getResponse();
+        return true;
+    }
+
+    private function validateData()
+    {
+        if(!isset($this->data['ebook_id'], $this->data['transaction_time'], $this->data['transaction_key']))
+            throw new Exception('Data array invalid', 500);
+
+        if(time() - $this->data['transaction_time'] > 3600)
+            throw new Exception('Download expired', 403);
+
+        if(!is_int($this->data['ebook_id']))
+            throw new Exception('Ebook_id must be a number', 400);
+
+        if(strlen($this->data['transaction_key']) > 200)
+            throw new Exception('Invalid transaction_key', 400);
+
+        $this->data['client_id'] = $this->clientId;
     }
 
     public function download()
     {
-        $request = new Server\Request(Server\Config\SysConfig::$BASE_CONNECT_URI . Server\Config\SysConfig::$BASE_DOWNLOAD . 'download');
-        $request->build();
+        $request = new Server\Request(Server\Config\SysConfig::$BASE_CONNECT_URI . Server\Config\SysConfig::$BASE_DOWNLOAD . 'get.php');
+        $request->setPost($this->data);
+        $request->authenticate(true, $this->clientId, $this->clientSecret);
+        $request->create();
 
         try
         {
-            $request->send();
+            $request->execute();
         }
         catch(Exception $e)
         {
-            // DEBUG -> $request->getErrors();
-            throw new Exception($request->getErrors(), $e->getCode());
+            throw new Exception($e->getMessage(), $e->getCode());
         }
 
-        return $request->getResponse();
+        return $request;
     }
 
 }

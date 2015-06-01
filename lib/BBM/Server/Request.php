@@ -12,12 +12,13 @@ namespace BBM\Server;
  * Class Request
  * @package BBM\Server
  */
+/**
+ * Class Request
+ * @package BBM\Server
+ */
 class Request
 {
-    /**
-     * @var string
-     */
-    protected $_useragent = 'Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1';
+
     /**
      * @var
      */
@@ -42,10 +43,6 @@ class Request
      * @var
      */
     protected $_postFields;
-    /**
-     * @var string
-     */
-    protected $_referer ="http://www.google.com";
 
     /**
      * @var
@@ -90,10 +87,18 @@ class Request
 
     /**
      * @param bool $y
+     * @param null $auth_name
+     * @param null $auth_pass
      */
-    public function authenticate($y = TRUE)
+    public function authenticate($y = TRUE, $auth_name = null, $auth_pass = null)
     {
         $this->authentication = $y;
+
+        if($auth_name && $auth_pass)
+        {
+            $this->setName($auth_name);
+            $this->setPass($auth_pass);
+        }
     }
 
     /**
@@ -133,28 +138,12 @@ class Request
     }
 
     /**
-     * @param $referer
-     */
-    public function setReferer($referer)
-    {
-        $this->_referer = $referer;
-    }
-
-    /**
      * @param $postFields
      */
-    public function setPost ($postFields)
+    public function setPost($postFields)
     {
         $this->_post = true;
         $this->_postFields = $postFields;
-    }
-
-    /**
-     * @param $userAgent
-     */
-    public function setUserAgent($userAgent)
-    {
-        $this->_useragent = $userAgent;
     }
 
     /**
@@ -171,7 +160,7 @@ class Request
         curl_setopt($this->curlHandler,CURLOPT_RETURNTRANSFER,true);
         curl_setopt($this->curlHandler,CURLOPT_FOLLOWLOCATION,$this->_followlocation);
 
-        if($this->authentication == 1)
+        if($this->authentication)
         {
             curl_setopt($this->curlHandler, CURLOPT_USERPWD, $this->auth_name.':'.$this->auth_pass);
         }
@@ -197,8 +186,8 @@ class Request
             curl_setopt($this->curlHandler,CURLOPT_BINARYTRANSFER,true);
         }
 
-        curl_setopt($this->curlHandler,CURLOPT_USERAGENT,$this->_useragent);
-        curl_setopt($this->curlHandler,CURLOPT_REFERER,$this->_referer);
+        curl_setopt($this->curlHandler,CURLOPT_USERAGENT, $_SERVER['HTTP_USER_AGENT']);
+        curl_setopt($this->curlHandler,CURLOPT_REFERER, $_SERVER['SERVER_NAME']);
     }
 
     /**
@@ -209,6 +198,11 @@ class Request
         $this->_return = curl_exec($this->curlHandler);
         $this->_status = curl_getinfo($this->curlHandler,CURLINFO_HTTP_CODE);
         curl_close($this->curlHandler);
+
+        if($this->getHttpStatus() == 200)
+            return $this->_return;
+        else
+            throw new Exception($this->_return, $this->getHttpStatus());
     }
 
     /**
