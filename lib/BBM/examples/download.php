@@ -6,13 +6,13 @@
  * Time: 6:36 PM
  */
 
-$download = new BBM\Download('testeclient', 'testeclient');
+$download = new BBM\Download('8effee409c625e1a2d8f5033631840e6ce1dcb64', 'testeclient');
 
 $data = [
     'ebook_id' => 48,
-    'transaction_time' => 1433185687,
+    'transaction_time' => time(),
     'transaction_key' => 'chaveTransacaoTeste'
 ];
 
 if($download->validate($data))
-    echo $download->download();
+    $download->download();

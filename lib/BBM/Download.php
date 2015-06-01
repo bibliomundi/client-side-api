@@ -23,7 +23,7 @@ class Download extends Connect
 
     public function __construct($clientId, $clientSecret)
     {
-        if(strlen($clientId) > 32 || strlen($clientSecret) > 32)
+        if(strlen($clientId) > 40 || strlen($clientSecret) > 40)
             throw new Exception('Invalid Credentials', 400);
 
         $this->clientId = $clientId;
@@ -40,8 +40,8 @@ class Download extends Connect
 
             $request = new Server\Request(Server\Config\SysConfig::$BASE_CONNECT_URI . 'token.php');
             $request->authenticate(true, $this->clientId, $this->clientSecret);
-            $request->setPost(['grant_type' => Server\Config\SysConfig::$GRANT_TYPE]);
             $request->create();
+            $request->setPost(['grant_type' => Server\Config\SysConfig::$GRANT_TYPE]);
             $response = json_decode($request->execute());
 
             $this->data['access_token'] = $response->access_token;
@@ -74,9 +74,9 @@ class Download extends Connect
     public function download()
     {
         $request = new Server\Request(Server\Config\SysConfig::$BASE_CONNECT_URI . Server\Config\SysConfig::$BASE_DOWNLOAD . 'get.php');
-        $request->setPost($this->data);
-        $request->authenticate(true, $this->clientId, $this->clientSecret);
+        $request->authenticate(false);
         $request->create();
+        $request->setPost($this->data);
 
         try
         {
@@ -87,7 +87,14 @@ class Download extends Connect
             throw new Exception($e->getMessage(), $e->getCode());
         }
 
-        return $request;
+        header('Content-Type: application/epub+zip');
+        header('Content-Disposition: attachment; filename="'.md5(time()).'.epub"');
+        header("Content-Transfer-Encoding: binary");
+        header('Expires: 0');
+        header('Pragma: no-cache');
+        header("Content-Length: ".strlen($request));
+
+        exit($request);
     }
 
 }

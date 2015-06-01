@@ -142,8 +142,17 @@ class Request
      */
     public function setPost($postFields)
     {
-        $this->_post = true;
+        $post = '';
+        $this->_post = 1;
         $this->_postFields = $postFields;
+
+        curl_setopt($this->curlHandler,CURLOPT_POST, $this->_post);
+        foreach($this->_postFields as $field => $value)
+        {
+            $post[] = "$field=$value";
+        }
+
+        curl_setopt($this->curlHandler, CURLOPT_POSTFIELDS, implode('&', $post));
     }
 
     /**
@@ -154,7 +163,7 @@ class Request
         $this->curlHandler = curl_init();
 
         curl_setopt($this->curlHandler,CURLOPT_URL,$this->_url);
-        curl_setopt($this->curlHandler,CURLOPT_HTTPHEADER,array('Expect:'));
+        curl_setopt($this->curlHandler,CURLOPT_HTTPHEADER,array('Content-Type: application/x-www-form-urlencoded'));
         curl_setopt($this->curlHandler,CURLOPT_TIMEOUT,$this->_timeout);
         curl_setopt($this->curlHandler,CURLOPT_MAXREDIRS,$this->_maxRedirects);
         curl_setopt($this->curlHandler,CURLOPT_RETURNTRANSFER,true);
@@ -163,12 +172,6 @@ class Request
         if($this->authentication)
         {
             curl_setopt($this->curlHandler, CURLOPT_USERPWD, $this->auth_name.':'.$this->auth_pass);
-        }
-
-        if($this->_post)
-        {
-            curl_setopt($this->curlHandler,CURLOPT_POST,true);
-            curl_setopt($this->curlHandler,CURLOPT_POSTFIELDS,$this->_postFields);
         }
 
         if($this->_includeHeader)
@@ -195,6 +198,7 @@ class Request
      */
     public function execute()
     {
+
         $this->_return = curl_exec($this->curlHandler);
         $this->_status = curl_getinfo($this->curlHandler,CURLINFO_HTTP_CODE);
         curl_close($this->curlHandler);
