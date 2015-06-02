@@ -1,11 +1,14 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: victor
- * Date: 6/1/15
- * Time: 2:37 PM
+ * Created by Bibliomundi.
+ * User: Victor Martins
+ * Contact: victor.martins@bibliomundi.com.br
+ * Site: http://bibliomundi.com.br
  */
 
+/**
+ * This file is used to autoload the API library
+ */
 
 $classes = [
     'BBM\Server\Config\SysConfig',
@@ -17,6 +20,10 @@ $classes = [
     'BBM\Purchase'
 ];
 
+/**
+ * Used to load the class passed by parameter.
+ * @param $className
+ */
 function autoload($className)
 {
     $className = ltrim($className, '\\');

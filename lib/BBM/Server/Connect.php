@@ -1,19 +1,16 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: victor
- * Date: 5/18/15
- * Time: 6:04 PM
+ * Created by Bibliomundi.
+ * User: Victor Martins
+ * Contact: victor.martins@bibliomundi.com.br
+ * Site: http://bibliomundi.com.br
  */
 
 namespace BBM\Server;
 
 /**
  * Class Connect
- * @package BBM\Server
- */
-/**
- * Class Connect
+ * Nothing to do here for while.
  * @package BBM\Server
  */
 class Connect {

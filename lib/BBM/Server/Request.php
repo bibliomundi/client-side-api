@@ -1,19 +1,17 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: victor
- * Date: 5/18/15
- * Time: 6:04 PM
+ * Created by Bibliomundi.
+ * User: Victor Martins
+ * Contact: victor.martins@bibliomundi.com.br
+ * Site: http://bibliomundi.com.br
  */
 
 namespace BBM\Server;
 
 /**
  * Class Request
- * @package BBM\Server
- */
-/**
- * Class Request
+ * Used to handle the connection with the server using cURL methods.
+ * It`s HIGHLY RECOMMENDED that you DO NOT change this file.
  * @package BBM\Server
  */
 class Request

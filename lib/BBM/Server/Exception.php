@@ -1,16 +1,24 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: victor
- * Date: 5/18/15
- * Time: 6:48 PM
+ * Created by Bibliomundi.
+ * User: Victor Martins
+ * Contact: victor.martins@bibliomundi.com.br
+ * Site: http://bibliomundi.com.br
  */
 
 namespace BBM\Server;
 
-
+/**
+ * Class Exception
+ * Nothing to do here for while.
+ * @package BBM\Server
+ */
 class Exception extends \Exception {
 
+    /**
+     * @param string $errors
+     * @param int    $code
+     */
     public function __construct($errors, $code)
     {
         if(is_array($errors))

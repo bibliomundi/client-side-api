@@ -1,18 +1,39 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: victor
- * Date: 5/18/15
- * Time: 6:36 PM
+ * Created by Bibliomundi.
+ * User: Victor Martins
+ * Contact: victor.martins@bibliomundi.com.br
+ * Site: http://bibliomundi.com.br
  */
 
-$download = new BBM\Download('8effee409c625e1a2d8f5033631840e6ce1dcb64', 'testeclient');
+// NEW INSTANCE OF THE DOWNLOAD. EVERY NEW DOWNLOAD MUST BE A NEW INSTANCE.
+$download = new BBM\Download('YOUR_CLIENT_ID', 'YOUR_CLIENT_STORE');
 
 $data = [
-    'ebook_id' => 48,
-    'transaction_time' => time(),
-    'transaction_key' => 'chaveTransacaoTeste'
+    'ebook_id' => 1, // YOU MUST 1 TO TEST, ANYONE MORE WILL BE COUNT AS AN ACTUAL DOWNLOAD.
+    'transaction_time' => time(), // IT`S HIGHLY RECOMMENDED THAT YOU CANNOT CHANGE THE TRANSACTION TIME.
+    'transaction_key' => 'TEST_TRANSACTION_KEY' // YOU MUST SET THIS TO TEST, ANY OTHER ACTIVE TRANSACTION KEY WILL BE COUNT AS AN ACTUAL DOWNLOAD.
 ];
 
-if($download->validate($data))
-    $download->download();
+if($download->validate($data)) // IF IS A VALID REQUEST.
+    $download->download(); // EXECUTE THE DOWNLOAD.
+
+/*
+ * IF YOU WANT TO HANDLE THE ERRORS, USE TRY/CATCH AS BELOW:
+ */
+
+//try
+//{
+//    $download->validate($data);
+//    $download->download();
+//}
+//catch(\BBM\Server\Exception $e)
+//{
+//    // HERE YOU CAN HANDLE THE ERROR AS YOU WANT TO.
+//    // EXAMPLE:
+//    throw new TestException($e->getMessage(), $e->getCode());
+//}
+
+/*
+ * EVERY ERROR ON THE REQUEST OR IN THE VALIDATIONS WILL THROWN A EXCEPTION.
+ */
