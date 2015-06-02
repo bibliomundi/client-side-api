@@ -13,24 +13,38 @@ namespace BBM\Server;
  * Nothing to do here for while.
  * @package BBM\Server
  */
-class Connect {
+class Connect
+{
+    /**
+     * CLIENT ID, this string is sent to you by the Bibliomundi, and must be
+     * the same in all areas of this API.
+     * @property String
+     */
+    public $clientId;
 
     /**
-     * @property string
+     * CLIENT SECRET, this string is sent to you by the Bibliomundi, and must be
+     * the same in all areas of this API.
+     * @property String
      */
-    private $client_id = 'YOUR_CLIENT_ID';
-    /**
-     * @property string
-     */
-    private $client_secret = 'YOUR_CLIENT_SECRET';
+    public $clientSecret;
+
 
     /**
-     * @param $client_id
-     * @param $client_secret
+     * ClientID and ClientSecret is first validated here, if it do not fit, will be thrown
+     * an exception.
+     * @param $clientId
+     * @param $clientSecret
+     *
+     * @throws Exception
      */
-    public function __construct($client_id, $client_secret)
+    public function __construct($clientId, $clientSecret)
     {
-        $this->client_id = $client_id;
-        $this->client_secret = $client_secret;
+        // FIRST CHECK, WILL BE DOUBLE CHECKED IN SERVER-SIDE.
+        if(strlen($clientId) > 40 || strlen($clientSecret) > 40)
+            throw new Exception('Invalid Credentials', 400);
+
+        $this->clientId = $clientId;
+        $this->clientSecret = $clientSecret;
     }
 }

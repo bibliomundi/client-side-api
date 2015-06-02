@@ -22,43 +22,12 @@ use BBM\Server\Exception;
  */
 class Download extends Connect
 {
-    /**
-     * CLIENT ID, this string is sent to you by the Bibliomundi, and must be
-     * the same in all areas of this API.
-     * @property String
-     */
-    private $clientId;
-
-    /**
-     * CLIENT SECRET, this string is sent to you by the Bibliomundi, and must be
-     * the same in all areas of this API.
-     * @property String
-     */
-    private $clientSecret;
 
     /**
      * Data that the API send to the Bibliomundi Server.
      * @var Mixed
      */
     private $data;
-
-    /**
-     * ClientID and ClientSecret is first validated here, if it do not fit, will be thrown
-     * an exception.
-     * @param $clientId
-     * @param $clientSecret
-     *
-     * @throws Exception
-     */
-    public function __construct($clientId, $clientSecret)
-    {
-        // FIRST CHECK, WILL BE DOUBLE CHECKED IN SERVER-SIDE.
-        if(strlen($clientId) > 40 || strlen($clientSecret) > 40)
-            throw new Exception('Invalid Credentials', 400);
-
-        $this->clientId = $clientId;
-        $this->clientSecret = $clientSecret;
-    }
 
     /**
      * Validate the data and get the OAuth2 access_token for this request.
