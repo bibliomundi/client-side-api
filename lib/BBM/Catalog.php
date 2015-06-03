@@ -29,24 +29,101 @@
 
 namespace BBM;
 
+use BBM\Server\Config\SysConfig;
 use BBM\Server\Connect;
+use BBM\Server\Exception;
 
 /**
  * Class Catalog
  * Used to list the ebooks inside the Bibliomundi server.
- * @deprecated
  * @package BBM
  */
-class Catalog extends Connect {
+class Catalog extends Connect
+{
+    /**
+     * Data that the API send to the Bibliomundi Server.
+     * @var Mixed
+     */
+    private $data;
 
     /**
-     *
+     * Scope that you want to get from the API
+     * @property
      */
-    public function get(){}
+    private $scope;
 
     /**
+     * @param        $clientId
+     * @param        $clientSecret
+     * @param string $scope
      *
+     * @throws Exception
      */
-    public function update(){}
+    public function __construct($clientId, $clientSecret, $scope = 'complete')
+    {
+        if(!in_array($scope, SysConfig::$ACCEPTED_SCOPES))
+            throw new Exception('Invalid Scope', 400);
+
+        $this->scope = $scope;
+        parent::__construct($clientId, $clientSecret);
+    }
+
+    /**
+     * Validate the data and get the OAuth2 access_token for this request.
+     *
+     * @return bool
+     * @throws Exception
+     */
+    public function validate()
+    {
+        $this->data = ['transaction_time' => time()];
+
+        try
+        {
+            // IF NO EXCEPTION IS THROWN BEFORE, THE REQUEST CAN BE SENT, SO
+            // HERE WE GET THE ACCESS TOKEN FOR THIS DOWNLOAD REQUEST.
+            $request = new Server\Request(Server\Config\SysConfig::$BASE_CONNECT_URI . 'token.php');
+            $request->authenticate(true, $this->clientId, $this->clientSecret);
+            $request->create();
+            $request->setPost(['grant_type' => Server\Config\SysConfig::$GRANT_TYPE]);
+            $response = json_decode($request->execute());
+
+            // SET THE ACCESS TOKEN TO THE NEXT REQUEST DATA.
+            $this->data['access_token'] = $response->access_token;
+        }
+        catch(Exception $e)
+        {
+            throw $e;
+        }
+
+        return true;
+    }
+
+    /**
+     * Get the XML STRING from our server, we do not handle the XML data, only output this
+     * string, YOU MUST HANDLE THIS AND INSERT INTO YOUR DATABASE, see the manual if needed.
+     * @return String // ONIX XML STRING
+     * @throws Exception
+     */
+    public function get()
+    {
+        // GENERATE THE CURL HANDLER
+        $request = new Server\Request(Server\Config\SysConfig::$BASE_CONNECT_URI . Server\Config\SysConfig::$BASE_DOWNLOAD . 'list.php');
+        $request->authenticate(false);
+        $request->create();
+        $request->setPost($this->data);
+
+        try
+        {
+            // SEND IT, IF OKAY, THE __TOSTRING WILL BE THE ONIX XML RESPONSE
+            $request->execute();
+        }
+        catch(Exception $e)
+        {
+            throw new Exception($e->getMessage(), $e->getCode());
+        }
+
+        return $request->__toString();
+    }
 
 }

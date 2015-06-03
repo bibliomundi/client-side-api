@@ -34,6 +34,10 @@ namespace BBM\Server\Config;
  * Just a config file, nothing to do here.
  * @package BBM\Server\Config
  */
+/**
+ * Class SysConfig
+ * @package BBM\Server\Config
+ */
 class SysConfig {
 
     /**
@@ -60,4 +64,9 @@ class SysConfig {
      * @var string
      */
     public static $GRANT_TYPE = 'client_credentials';
+
+    /**
+     * @var array
+     */
+    public static $ACCEPTED_SCOPES = ['complete', 'updates'];
 }

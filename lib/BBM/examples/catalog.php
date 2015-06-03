@@ -26,3 +26,20 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+
+// NEW INSTANCE OF THE CATALOG. EVERY NEW LIST MUST BE A NEW INSTANCE.
+$download = new BBM\Catalog('YOUR_CLIENT_ID', 'YOUR_CLIENT_SECRET', 'SCOPE');
+
+/////////////////////////////////////////////////
+//                  NOTICE                     //
+// SCOPE DEFAULT IS "complete"                 //
+// accepted scopes : complete, updates         //
+/////////////////////////////////////////////////
+
+
+if(!$download->validate()) // IF IS A VALID REQUEST.
+    throw new \BBM\Server\Exception('Invalid Request', 400);
+
+$xml = $download->get(); // GET THE ONIX XML STRING, YOU CAN ECHO OR EXIT THIS STRING
+                         // BUT IS RECOMMENDED THAT YOU USE SOME XML PARSER TO INSERT THIS
+                         // INTO YOUR DATABASE.
