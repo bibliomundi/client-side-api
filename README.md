@@ -1,5 +1,5 @@
 ##About the API
-Bibliomundi is a ebook distributor, almost a marketplace, this API is used to handle the request between the store (client) and the application server, that host the ebook system. No configuration needed, just a ready-to-go application that was developed to make easier the client-side request.
+[Bibliomundi] is a ebook distributor, almost a marketplace, this API is used to handle the request between the store (client) and the application server, that host the ebook system. No configuration needed, just a ready-to-go application that was developed to make easier the client-side request.
 
 All the requests are OAuth2 authenticated by client\_credentials method, and the API uses [cURL] to execute itself.
 
@@ -31,4 +31,4 @@ MIT
 
 [php 5.5]:http://php.net/
 [curl]:http://php.net/manual/en/book.curl.php
-
+[bibliomundi]:http://bibliomudi.com
