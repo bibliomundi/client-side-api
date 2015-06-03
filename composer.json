@@ -2,7 +2,7 @@
     "name": "Bibliomundi Client-side API",
     "type": "library",
     "description": "Request handler for Bibliomundi authorized clients.",
-    "keywords": ["bibliomundi"]
+    "keywords": ["bibliomundi"],
     "homepage": "http://bibliomundi.github.io/client-side-api/",
     "license": "MIT",
     "authors": [
