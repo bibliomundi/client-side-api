@@ -28,7 +28,7 @@
  */
 
 // NEW INSTANCE OF THE CATALOG. EVERY NEW LIST MUST BE A NEW INSTANCE.
-$download = new BBM\Catalog('YOUR_CLIENT_ID', 'YOUR_CLIENT_SECRET', 'SCOPE');
+$catalog = new BBM\Catalog('YOUR_CLIENT_ID', 'YOUR_CLIENT_SECRET', 'SCOPE');
 
 /////////////////////////////////////////////////
 //                  NOTICE                     //
@@ -37,9 +37,9 @@ $download = new BBM\Catalog('YOUR_CLIENT_ID', 'YOUR_CLIENT_SECRET', 'SCOPE');
 /////////////////////////////////////////////////
 
 
-if(!$download->validate()) // IF IS A VALID REQUEST.
+if(!$catalog->validate()) // IF IS A VALID REQUEST.
     throw new \BBM\Server\Exception('Invalid Request', 400);
 
-$xml = $download->get(); // GET THE ONIX XML STRING, YOU CAN ECHO OR EXIT THIS STRING
+$xml = $catalog->get(); // GET THE ONIX XML STRING, YOU CAN ECHO OR EXIT THIS STRING
                          // BUT IS RECOMMENDED THAT YOU USE SOME XML PARSER TO INSERT THIS
                          // INTO YOUR DATABASE.
