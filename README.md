@@ -4,7 +4,7 @@ API to the store connect as needed to our server-side.
 
 
 ### Version
-0.1
+0.2
 
 ### Tech
 
