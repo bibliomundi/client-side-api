@@ -1,5 +1,5 @@
 {
-    "name": "Bibliomundi Client-side API",
+    "name": "bibliomundi/client-side-api",
     "type": "library",
     "description": "Request handler for Bibliomundi authorized clients.",
     "keywords": ["bibliomundi"],
