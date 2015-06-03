@@ -1,0 +1,19 @@
+{
+    "name": "Bibliomundi Client-side API",
+    "type": "library",
+    "description": "Request handler for Bibliomundi authorized clients.",
+    "keywords": ["bibliomundi"]
+    "homepage": "http://bibliomundi.github.io/client-side-api/",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Victor Martins",
+            "email": "victor.martins@bibliomundi.com.br",
+            "homepage": "http://bibliomundi.com.br",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.0"
+    }
+}
