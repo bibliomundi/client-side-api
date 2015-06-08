@@ -27,4 +27,24 @@
  * SOFTWARE.
  */
 
-exit('NOT READY YET');
+// NEW INSTANCE OF THE DOWNLOAD. EVERY NEW DOWNLOAD MUST BE A NEW INSTANCE.
+$purchase = new BBM\Purchase('8effee409c625e1a2d8f5033631840e6ce1dcb64', 'testeclient');
+
+$data = [
+    'bibliomundiEbookID' => 1,
+    'price' => 50,
+    'customerIdentificationNumber' => 32,
+    'customerFullname' => 'Astolfo Henrique',
+    'customerEmail' => 'contato@vfreitas.com',
+    'customerGender' => 'm',
+    'customerBirthday' => '11/03/1991',
+    'customerCountry' => 'BR',
+    'customerZipcode' => '2250145',
+    'customerState' => 'RJ'
+];
+
+var_dump($purchase->validate($data));
+
+//
+//if($purchase->validate($data)) // IF IS A VALID REQUEST.
+//    $purchase->download(); // EXECUTE THE DOWNLOAD.

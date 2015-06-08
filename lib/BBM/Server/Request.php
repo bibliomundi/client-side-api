@@ -174,6 +174,11 @@ class Request
         curl_setopt($this->curlHandler, CURLOPT_POSTFIELDS, implode('&', $post));
     }
 
+    public function reset()
+    {
+        unset($this->curlHandler);
+    }
+
     /**
      *
      */
