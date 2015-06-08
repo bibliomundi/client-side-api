@@ -90,6 +90,8 @@ class Catalog extends Connect
 
             // SET THE ACCESS TOKEN TO THE NEXT REQUEST DATA.
             $this->data['access_token'] = $response->access_token;
+            $this->data['client_id'] = $this->clientId;
+            $this->data['scope'] = $this->scope;
         }
         catch(Exception $e)
         {
