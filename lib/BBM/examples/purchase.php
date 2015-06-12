@@ -28,7 +28,7 @@
  */
 
 // NEW INSTANCE OF THE PURCHASE. YOU CAN SEND MORE THEN ONE ITEM ON THE PURCHASE.
-$purchase = new BBM\Purchase('8effee409c625e1a2d8f5033631840e6ce1dcb64', '8effee409c625e1a2d8f5033631840e6ce1dcb64');
+$purchase = new BBM\Purchase('YOUR_CLIENT_ID', 'YOUR_CLIENT_SECRET');
 
 // CUSTOMER DATA ARRAY
 $customer = [
@@ -86,7 +86,7 @@ try
     // WHATEVER YOU SEND TO US, BUT, STAY ON THE PATTERNS AND FOLLOW THE GUIDE
     // AND WE WILL NOT HAVE FURTHER PROBLEMS.
 
-    echo $purchase->checkout('TRANSACTION_KEY21', time());
+    echo $purchase->checkout('TRANSACTION_KEY', time());
 }
 catch(\BBM\Server\Exception $e)
 {
