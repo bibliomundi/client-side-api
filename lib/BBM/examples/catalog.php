@@ -41,5 +41,7 @@ if(!$catalog->validate()) // IF IS A VALID REQUEST.
     throw new \BBM\Server\Exception('Invalid Request', 400);
 
 $xml = $catalog->get(); // GET THE ONIX XML STRING, YOU CAN ECHO OR EXIT THIS STRING
-                         // BUT IS RECOMMENDED THAT YOU USE SOME XML PARSER TO INSERT THIS
-                         // INTO YOUR DATABASE.
+                        // BUT IS RECOMMENDED THAT YOU USE SOME XML PARSER TO INSERT THIS
+                        // INTO YOUR DATABASE.
+
+echo $xml;

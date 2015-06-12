@@ -27,24 +27,63 @@
  * SOFTWARE.
  */
 
-// NEW INSTANCE OF THE DOWNLOAD. EVERY NEW DOWNLOAD MUST BE A NEW INSTANCE.
-$purchase = new BBM\Purchase('8effee409c625e1a2d8f5033631840e6ce1dcb64', 'testeclient');
+// NEW INSTANCE OF THE PURCHASE. YOU CAN SEND MORE THEN ONE ITEM ON THE PURCHASE.
+$purchase = new BBM\Purchase('YOUR_CLIENT_ID', 'YOUR_CLIENT_SECRET');
 
-$data = [
-    'bibliomundiEbookID' => 1,
-    'price' => 50,
-    'customerIdentificationNumber' => 32,
-    'customerFullname' => 'Astolfo Henrique',
-    'customerEmail' => 'contato@vfreitas.com',
-    'customerGender' => 'm',
-    'customerBirthday' => '11/03/1991',
-    'customerCountry' => 'BR',
-    'customerZipcode' => '2250145',
-    'customerState' => 'RJ'
+// CUSTOMER DATA ARRAY
+$customer = [
+    'customerIdentificationNumber' => 1, // INT, YOUR STORE CUSTOMER ID
+    'customerFullname' => 'CUSTOMER_NAME', // STRING, CUSTOMER FULL NAME
+    'customerEmail' => 'CUSTOMER_EMAIL', // STRING, CUSTOMER EMAIL
+    'customerGender' => 'm', // ENUM, CUSTOMER GENDER, USE m OR f (LOWERCASE!! male or female)
+    'customerBirthday' => 'Y/m/d CUSTOMER_BIRTH_DATE', // STRING, CUSTOMER BIRTH DATE, USE Y/m/d (XXXX/XX/XX)
+    'customerCountry' => 'CUSTOMER_COUNTRY', // STRING, 2 CHAR STRING THAT INDICATE THE CUSTOMER COUNTRY (BR, US, ES, etc)
+    'customerZipcode' => 'CUSTOMER_ZIPCODE', // STRING, POSTAL CODE, ONLY NUMBERS
+    'customerState' => 'CUSTOMER_STATE' // STRING, 2 CHAR STRING THAT INDICATE THE CUSTOMER STATE (RJ, SP, NY, etc)
 ];
 
-var_dump($purchase->validate($data));
+// SET THE CUSTOMER OF THIS SALE, BASED ON THE PREVIOUS CUSTOMER
+$purchase->setCustomer($customer);
 
-//
-//if($purchase->validate($data)) // IF IS A VALID REQUEST.
-//    $purchase->download(); // EXECUTE THE DOWNLOAD.
+// ADD A NEW EBOOK, EVERY NEW EBOOK MUST BE ADDED AGAIN.
+// IF YOU WANT TO ADD A SINGLE BOOK, YOU CAN USE.
+//$purchase->addItem(1, 50.00);
+
+// OTHERWISE, IF YOU WANT A MULTIPLE SALE, YOU CAN SET LIKE THIS
+$purchasedEbooks = [
+    1 => ['id' => 1, 'price' => 50.00],
+    2 => ['id' => 2, 'price' => 100.00]
+];
+
+// FOREACH PURCHASED EBOOKS, ADD A NEW EBOOK.
+foreach($purchasedEbooks as $ebook)
+{
+    $purchase->addItem($ebook['id'], $ebook['price']);
+}
+
+// CHECK IF YOU CAN COMPLETE THIS PURCHASE BEFORE YOU PROCEED TO CHECKOUT.
+if($purchase->validate())
+{
+    // IF THE PURCHASE IS VALID, YOU CAN PROCEED TO YOUR CHECKOUT. DO NOT EXECUTE
+    // THE SELL BEFORE CHECK IF YOU REALLY CAN DO THIS. HAVE SOME CONDITIONS THAT
+    // YOUR STORE CANNOT SELL THE EBOOK, IS BETTER TO YOU TO CHECK IT BEFORE.
+
+    /*
+     * HERE YOU CAN SET ANYTHING YOU NEED TO CONTINUE YOUR CHECKOUT METHOD.
+     */
+
+    // ONCE THE CHECKOUT IS COMPLETE, WE NEED TO KNOW THIS, ONLY THING YOU NEED
+    // TO DO IS SEND TO US THE TRANSACTION KEY AND TRANSACTION TIME THAT YOU
+    // ARE ACTUALLY USING ON YOUR DATABASE.
+    //
+    // TRANSACTION_KEY = YOUR PURCHASE ID, SO WE CAN LINK YOUR PURCHASE TO OUR SALE.
+    // TRANSACTION_TIME = THE MOMENT THAT YOU RECORD ON THE DATABASE YOUR PURCHASE.
+    // NOTE: CAN'T BE MORE THE ONE HOUR OF DIFFERENCE BETWEEN THE PURCHASE AND THE REQUEST.
+    //
+    // THIS FIELDS ARE REQUIRED TO EXECUTE THE TRANSACTION SUCCESSFULLY
+    // IN THIS MOMENT, NO EXCEPTIONS OR ERRORS WILL BE RETURNED, AND WE WILL SAVE
+    // WHATEVER YOU SEND TO US, BUT, STAY ON THE PATTERNS AND FOLLOW THE GUIDE
+    // AND WE WILL NOT HAVE FURTHER PROBLEMS.
+
+    echo $purchase->checkout('TRANSACTION_KEY', 'TRANSACTION_TIME (time_stamp)');
+}

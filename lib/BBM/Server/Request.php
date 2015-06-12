@@ -157,6 +157,7 @@ class Request
     }
 
     /**
+     * @deprecated
      * @param $postFields
      */
     public function setPost($postFields)
@@ -165,18 +166,16 @@ class Request
         $this->_post = 1;
         $this->_postFields = $postFields;
 
-        curl_setopt($this->curlHandler,CURLOPT_POST, $this->_post);
         foreach($this->_postFields as $field => $value)
         {
+            if(is_array($value))
+                continue;
+
             $post[] = "$field=$value";
         }
 
-        curl_setopt($this->curlHandler, CURLOPT_POSTFIELDS, implode('&', $post));
-    }
-
-    public function reset()
-    {
-        unset($this->curlHandler);
+        curl_setopt($this->curlHandler, CURLOPT_POST, $this->_post);
+        curl_setopt($this->curlHandler, CURLOPT_POSTFIELDS, http_build_query($this->_postFields));
     }
 
     /**

@@ -31,6 +31,7 @@ namespace BBM;
 
 use BBM\Server\Connect;
 use BBM\Server\Exception;
+use BBM\Server\Request;
 
 /**
  * Class Purchase
@@ -41,9 +42,7 @@ use BBM\Server\Exception;
 class Purchase extends Connect
 {
     /**
-     * The array data must be:
-     * [“ebook_id”],
-     * [“price”],
+     * Customer that brought the ebook
      * [“customerIdentificationNumber”],
      * [“customerFullname”],
      * [“customerEmail”],
@@ -55,18 +54,30 @@ class Purchase extends Connect
      *
      * @property array
      */
+    private $customer;
+
+    /**
+     * The items that must be registered.
+     * @property
+     */
+    private $items;
+
+    /**
+     * Only a handler to be used in the post.
+     * @property array
+     */
     private $data = array();
 
     /**
      * Validate the data and get the OAuth2 access_token for this request.
-     * @param array $data
      *
      * @return bool
      * @throws Exception
      */
-    public function validate(Array $data)
+    public function validate()
     {
-        $this->data = $data;
+        $this->data = $this->customer;
+        $this->data['items'] = $this->items;
 
         try
         {
@@ -81,17 +92,19 @@ class Purchase extends Connect
             $request->setPost(['grant_type' => Server\Config\SysConfig::$GRANT_TYPE]);
             $response = json_decode($request->execute());
 
-            $request->reset();
+            // SET THE ACCESS TOKEN TO THE NEXT REQUEST DATA.
+            $this->data['access_token'] = $response->access_token;
+            $this->data['clientID'] = $this->clientId;
 
             if($this->validateData())
             {
-                // SET THE ACCESS TOKEN TO THE NEXT REQUEST DATA.
-                $this->data['access_token'] = $response->access_token;
+                $request = new Server\Request(Server\Config\SysConfig::$BASE_CONNECT_URI . Server\Config\SysConfig::$BASE_PURCHASE . 'validate.php' );
+                $request->authenticate(false);
                 $request->create();
+                $request->setPost($this->data);
 
                 // SET THE DATA TO VALIDATE.
-                $request->setPost($this->data);
-                $response = json_decode($request->execute());
+                $response = $request->execute();
 
                 return $response;
             }
@@ -105,11 +118,15 @@ class Purchase extends Connect
         return false;
     }
 
+    /**
+     * Validate some data, it`s like a front-end validation, all this will be re-validated by the
+     * backend environment.
+     * @return bool
+     * @throws Exception
+     */
     private function validateData()
     {
         if(!isset(
-            $this->data['bibliomundiEbookID'],
-            $this->data['price'],
             $this->data['customerIdentificationNumber'],
             $this->data['customerFullname'],
             $this->data['customerEmail'],
@@ -120,17 +137,56 @@ class Purchase extends Connect
         ))
             throw new Exception('Invalid Request, check the mandatory fields', 400);
 
+        if(empty($this->data['items']))
+            throw new Exception('No ebooks added', 400);
+
         return true;
     }
 
-    public function setPurchaseData($data)
+    /**
+     * Set the active customer that is buying the ebooks.
+     * @param array $data
+     */
+    public function setCustomer(Array $data)
     {
-        $this->data = $data;
+        $this->customer = $data;
     }
 
     /**
+     * Add new itens to the bundle that will be saved.
+     * @param $bibliomundiEbookID
+     * @param $price
      *
+     * @throws Exception
      */
-    public function register(){}
+    public function addItem($bibliomundiEbookID, $price)
+    {
+        if(isset($this->items[$bibliomundiEbookID]))
+            throw new Exception('This ebook was added before, you cannot add this again', 400);
+
+        $this->items[$bibliomundiEbookID] = ['bibliomundiEbookID' => $bibliomundiEbookID, 'price' => $price];
+    }
+
+    /**
+     * Execute the checkout of the purchase, indicate to us that you have already recived the "okay"
+     * from the payment gateway and already had inserted this same transaction_key to your database.
+     * @param $transactionKey
+     * @param $transactionTime
+     *
+     * @return mixed
+     * @throws Exception
+     */
+    public function checkout($transactionKey, $transactionTime)
+    {
+        $this->data['transactionKey'] = $transactionKey;
+        $this->data['saleDate'] = date('Y-m-d H:i:s', $transactionTime);
+        $this->data['items'] = $this->items;
+
+        $request = new Server\Request(Server\Config\SysConfig::$BASE_CONNECT_URI . Server\Config\SysConfig::$BASE_PURCHASE . 'purchase.php' );
+        $request->authenticate(false);
+        $request->create();
+        $request->setPost($this->data);
+        return $request->execute();
+    }
 
 }
