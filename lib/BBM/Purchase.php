@@ -106,13 +106,16 @@ class Purchase extends Connect
                 // SET THE DATA TO VALIDATE.
                 $response = $request->execute();
 
+                if(!in_array($request->getHttpStatus(), [200, 201]))
+                    throw new Exception($response, $request->getHttpStatus());
+
                 return $response;
             }
 
         }
         catch(Exception $e)
         {
-            throw $e;
+            throw new Exception($e->getMessage(), $e->getCode(), $e);
         }
 
         return false;

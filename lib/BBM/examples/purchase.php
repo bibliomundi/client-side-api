@@ -28,18 +28,18 @@
  */
 
 // NEW INSTANCE OF THE PURCHASE. YOU CAN SEND MORE THEN ONE ITEM ON THE PURCHASE.
-$purchase = new BBM\Purchase('YOUR_CLIENT_ID', 'YOUR_CLIENT_SECRET');
+$purchase = new BBM\Purchase('8effee409c625e1a2d8f5033631840e6ce1dcb64', '8effee409c625e1a2d8f5033631840e6ce1dcb64');
 
 // CUSTOMER DATA ARRAY
 $customer = [
     'customerIdentificationNumber' => 1, // INT, YOUR STORE CUSTOMER ID
-    'customerFullname' => 'CUSTOMER_NAME', // STRING, CUSTOMER FULL NAME
-    'customerEmail' => 'CUSTOMER_EMAIL', // STRING, CUSTOMER EMAIL
+    'customerFullname' => 'CUSTOMER NAME', // STRING, CUSTOMER FULL NAME
+    'customerEmail' => 'customer@email.com', // STRING, CUSTOMER EMAIL
     'customerGender' => 'm', // ENUM, CUSTOMER GENDER, USE m OR f (LOWERCASE!! male or female)
-    'customerBirthday' => 'Y/m/d CUSTOMER_BIRTH_DATE', // STRING, CUSTOMER BIRTH DATE, USE Y/m/d (XXXX/XX/XX)
-    'customerCountry' => 'CUSTOMER_COUNTRY', // STRING, 2 CHAR STRING THAT INDICATE THE CUSTOMER COUNTRY (BR, US, ES, etc)
-    'customerZipcode' => 'CUSTOMER_ZIPCODE', // STRING, POSTAL CODE, ONLY NUMBERS
-    'customerState' => 'CUSTOMER_STATE' // STRING, 2 CHAR STRING THAT INDICATE THE CUSTOMER STATE (RJ, SP, NY, etc)
+    'customerBirthday' => '1991/11/03', // STRING, CUSTOMER BIRTH DATE, USE Y/m/d (XXXX/XX/XX)
+    'customerCountry' => 'BR', // STRING, 2 CHAR STRING THAT INDICATE THE CUSTOMER COUNTRY (BR, US, ES, etc)
+    'customerZipcode' => '31231223', // STRING, POSTAL CODE, ONLY NUMBERS
+    'customerState' => 'RJ' // STRING, 2 CHAR STRING THAT INDICATE THE CUSTOMER STATE (RJ, SP, NY, etc)
 ];
 
 // SET THE CUSTOMER OF THIS SALE, BASED ON THE PREVIOUS CUSTOMER
@@ -47,23 +47,24 @@ $purchase->setCustomer($customer);
 
 // ADD A NEW EBOOK, EVERY NEW EBOOK MUST BE ADDED AGAIN.
 // IF YOU WANT TO ADD A SINGLE BOOK, YOU CAN USE.
-//$purchase->addItem(1, 50.00);
+$purchase->addItem(48, 20);
 
 // OTHERWISE, IF YOU WANT A MULTIPLE SALE, YOU CAN SET LIKE THIS
-$purchasedEbooks = [
-    1 => ['id' => 1, 'price' => 50.00],
-    2 => ['id' => 2, 'price' => 100.00]
-];
+//$purchasedEbooks = [
+//    1 => ['id' => 48, 'price' => 50.00]
+//];
 
 // FOREACH PURCHASED EBOOKS, ADD A NEW EBOOK.
-foreach($purchasedEbooks as $ebook)
-{
-    $purchase->addItem($ebook['id'], $ebook['price']);
-}
+//foreach($purchasedEbooks as $ebook)
+//{
+//    $purchase->addItem($ebook['id'], $ebook['price']);
+//}
 
 // CHECK IF YOU CAN COMPLETE THIS PURCHASE BEFORE YOU PROCEED TO CHECKOUT.
-if($purchase->validate())
+try
 {
+    $purchase->validate();
+
     // IF THE PURCHASE IS VALID, YOU CAN PROCEED TO YOUR CHECKOUT. DO NOT EXECUTE
     // THE SELL BEFORE CHECK IF YOU REALLY CAN DO THIS. HAVE SOME CONDITIONS THAT
     // YOUR STORE CANNOT SELL THE EBOOK, IS BETTER TO YOU TO CHECK IT BEFORE.
@@ -85,5 +86,9 @@ if($purchase->validate())
     // WHATEVER YOU SEND TO US, BUT, STAY ON THE PATTERNS AND FOLLOW THE GUIDE
     // AND WE WILL NOT HAVE FURTHER PROBLEMS.
 
-    echo $purchase->checkout('TRANSACTION_KEY', 'TRANSACTION_TIME (time_stamp)');
+    echo $purchase->checkout('TRANSACTION_KEY21', time());
+}
+catch(\BBM\Server\Exception $e)
+{
+    echo $e;
 }
