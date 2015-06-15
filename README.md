@@ -4,7 +4,7 @@
 All the requests are OAuth2 authenticated by client\_credentials method, and the API uses [cURL] to execute itself.
 
 ### Version
-0.9 - We are in current test phase, as soon as possible we will launch the live app.
+1.0
 
 ### Tech
 
