@@ -128,7 +128,8 @@ class Download extends Connect
         try
         {
             // SEND IT, IF OKAY, THE __TOSTRING WILL BE THE EBOOK BINARY STRING
-            $request->execute();
+            if(!$request->execute())
+                throw new Exception('Cannot download', 500);
         }
         catch(Exception $e)
         {
