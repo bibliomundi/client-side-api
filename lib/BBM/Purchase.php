@@ -164,10 +164,7 @@ class Purchase extends Connect
      */
     public function addItem($bibliomundiEbookID, $price)
     {
-        if(isset($this->items[$bibliomundiEbookID]))
-            throw new Exception('This ebook was added before, you cannot add this again', 400);
-
-        $this->items[$bibliomundiEbookID] = ['bibliomundiEbookID' => $bibliomundiEbookID, 'price' => $price];
+        $this->items[] = ['bibliomundiEbookID' => $bibliomundiEbookID, 'price' => $price];
     }
 
     /**
