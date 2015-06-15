@@ -44,4 +44,5 @@ $xml = $catalog->get(); // GET THE ONIX XML STRING, YOU CAN ECHO OR EXIT THIS ST
                         // BUT IS RECOMMENDED THAT YOU USE SOME XML PARSER TO INSERT THIS
                         // INTO YOUR DATABASE.
 
+header('Content-Type: application/xml; charset=utf-8');
 echo $xml;
