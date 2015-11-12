@@ -28,7 +28,7 @@
  */
 
 // NEW INSTANCE OF THE CATALOG. EVERY NEW LIST MUST BE A NEW INSTANCE.
-$catalog = new BBM\Catalog('77d16bbae3c2b12e2e9753013a22d03c5bf527e2', '6330b94cf8c69682f66375af1b11cddb87f8d8e2', 'complete');
+$catalog = new BBM\Catalog('YOUR_API_KET', 'YOUR_API_SECRET', 'SCOPE');
 
 /////////////////////////////////////////////////
 //                  NOTICE                     //
