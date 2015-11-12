@@ -30,6 +30,12 @@
 // NEW INSTANCE OF THE PURCHASE. YOU CAN SEND MORE THEN ONE ITEM ON THE PURCHASE.
 $purchase = new BBM\Purchase('YOUR_CLIENT_ID', 'YOUR_CLIENT_SECRET');
 
+/*
+ * Server environment that you want to use: sandbox or production.
+ * Default: 'sandbox'
+ */
+$catalog->environment = 'sandbox';
+
 // CUSTOMER DATA ARRAY
 $customer = [
     'customerIdentificationNumber' => 1, // INT, YOUR STORE CUSTOMER ID

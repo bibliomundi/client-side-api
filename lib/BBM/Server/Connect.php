@@ -50,6 +50,13 @@ class Connect
      */
     public $clientSecret;
 
+    /**
+     * Server environment that you want to use: sandbox or production.
+     * @default 'sandbox'
+     * @property String
+     */
+    public $environment = 'sandbox';
+
 
     /**
      * ClientID and ClientSecret is first validated here, if it do not fit, will be thrown

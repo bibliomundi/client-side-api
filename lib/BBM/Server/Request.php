@@ -157,7 +157,6 @@ class Request
     }
 
     /**
-     * @deprecated
      * @param $postFields
      */
     public function setPost($postFields)

@@ -30,6 +30,12 @@
 // NEW INSTANCE OF THE DOWNLOAD. EVERY NEW DOWNLOAD MUST BE A NEW INSTANCE.
 $download = new BBM\Download('YOUR_CLIENT_ID', 'YOUR_CLIENT_SECRET');
 
+/*
+ * Server environment that you want to use: sandbox or production.
+ * Default: 'sandbox'
+ */
+$catalog->environment = 'sandbox';
+
 $data = [
     'ebook_id' => 1, // YOU MUST 1 TO TEST, ANYONE MORE WILL BE COUNT AS AN ACTUAL DOWNLOAD.
     'transaction_time' => time(), // IT`S HIGHLY RECOMMENDED THAT YOU CANNOT CHANGE THE TRANSACTION TIME.

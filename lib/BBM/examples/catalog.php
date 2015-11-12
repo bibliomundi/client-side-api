@@ -28,13 +28,19 @@
  */
 
 // NEW INSTANCE OF THE CATALOG. EVERY NEW LIST MUST BE A NEW INSTANCE.
-$catalog = new BBM\Catalog('YOUR_CLIENT_ID', 'YOUR_CLIENT_SECRET', 'SCOPE');
+$catalog = new BBM\Catalog('77d16bbae3c2b12e2e9753013a22d03c5bf527e2', '6330b94cf8c69682f66375af1b11cddb87f8d8e2', 'complete');
 
 /////////////////////////////////////////////////
 //                  NOTICE                     //
 // SCOPE DEFAULT IS "complete"                 //
 // accepted scopes : complete, updates         //
 /////////////////////////////////////////////////
+
+/*
+ * Server environment that you want to use: sandbox or production.
+ * Default: 'sandbox'
+ */
+$catalog->environment = 'sandbox';
 
 
 if(!$catalog->validate()) // IF IS A VALID REQUEST.
@@ -44,5 +50,5 @@ $xml = $catalog->get(); // GET THE ONIX XML STRING, YOU CAN ECHO OR EXIT THIS ST
                         // BUT IS RECOMMENDED THAT YOU USE SOME XML PARSER TO INSERT THIS
                         // INTO YOUR DATABASE.
 
-header('Content-Type: application/xml; charset=utf-8');
+//header('Content-Type: application/xml; charset=utf-8');
 echo $xml;
