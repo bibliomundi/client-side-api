@@ -34,7 +34,13 @@ $download = new BBM\Download('YOUR_CLIENT_ID', 'YOUR_CLIENT_SECRET');
  * Server environment that you want to use: sandbox or production.
  * Default: 'sandbox'
  */
-$catalog->environment = 'sandbox';
+$download->environment = 'sandbox';
+
+/*
+ * Verbose (true|false), enable this option and a full output will be shown.
+ * Default: false
+ */
+$download->verbose();
 
 $data = [
     'ebook_id' => 1, // YOU MUST 1 TO TEST, ANYONE MORE WILL BE COUNT AS AN ACTUAL DOWNLOAD.

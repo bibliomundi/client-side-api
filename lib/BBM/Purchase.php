@@ -86,7 +86,7 @@ class Purchase extends Connect
 
             // IF NO EXCEPTION IS THROWN BEFORE, THE REQUEST CAN BE SENT, SO
             // HERE WE GET THE ACCESS TOKEN FOR THIS DOWNLOAD REQUEST.
-            $request = new Server\Request(Server\Config\SysConfig::$BASE_CONNECT_URI . 'token.php');
+            $request = new Server\Request(Server\Config\SysConfig::$BASE_CONNECT_URI . 'token.php', $this->verbose);
             $request->authenticate(true, $this->clientId, $this->clientSecret);
             $request->create();
             $request->setPost(['grant_type' => Server\Config\SysConfig::$GRANT_TYPE]);
@@ -98,7 +98,7 @@ class Purchase extends Connect
 
             if($this->validateData())
             {
-                $request = new Server\Request(Server\Config\SysConfig::$BASE_CONNECT_URI . Server\Config\SysConfig::$BASE_PURCHASE . 'validate.php' );
+                $request = new Server\Request(Server\Config\SysConfig::$BASE_CONNECT_URI . Server\Config\SysConfig::$BASE_PURCHASE . 'validate.php', $this->verbose);
                 $request->authenticate(false);
                 $request->create();
                 $request->setPost($this->data);
@@ -182,7 +182,7 @@ class Purchase extends Connect
         $this->data['saleDate'] = date('Y-m-d H:i:s', $transactionTime);
         $this->data['items'] = $this->items;
 
-        $request = new Server\Request(Server\Config\SysConfig::$BASE_CONNECT_URI . Server\Config\SysConfig::$BASE_PURCHASE . 'purchase.php' );
+        $request = new Server\Request(Server\Config\SysConfig::$BASE_CONNECT_URI . Server\Config\SysConfig::$BASE_PURCHASE . 'purchase.php', $this->verbose);
         $request->authenticate(false);
         $request->create();
         $request->setPost($this->data);

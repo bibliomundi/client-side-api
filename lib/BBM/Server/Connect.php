@@ -57,6 +57,12 @@ class Connect
      */
     public $environment = 'sandbox';
 
+    /**
+     * Verbose, enable that option and a full log will be output.
+     * @default false
+     * @property boolean
+     */
+    public $verbose = false;
 
     /**
      * ClientID and ClientSecret is first validated here, if it do not fit, will be thrown
@@ -75,4 +81,16 @@ class Connect
         $this->clientId = $clientId;
         $this->clientSecret = $clientSecret;
     }
+
+    public function verbose($status = true)
+    {
+        $this->verbose = $status;
+
+        if($status)
+        {
+            echo "<pre>";
+            var_dump("VERBOSE ACTIVATED!");
+        }
+    }
+
 }

@@ -28,7 +28,7 @@
  */
 
 // NEW INSTANCE OF THE CATALOG. EVERY NEW LIST MUST BE A NEW INSTANCE.
-$catalog = new BBM\Catalog('YOUR_API_KET', 'YOUR_API_SECRET', 'SCOPE');
+$catalog = new BBM\Catalog('YOUR_CLIENT_ID', 'YOUR_CLIENT_SECRET', 'complete');
 
 /////////////////////////////////////////////////
 //                  NOTICE                     //
@@ -41,6 +41,12 @@ $catalog = new BBM\Catalog('YOUR_API_KET', 'YOUR_API_SECRET', 'SCOPE');
  * Default: 'sandbox'
  */
 $catalog->environment = 'sandbox';
+
+/*
+ * Verbose (true|false), enable this option and a full output will be shown.
+ * Default: false
+ */
+$catalog->verbose();
 
 
 if(!$catalog->validate()) // IF IS A VALID REQUEST.

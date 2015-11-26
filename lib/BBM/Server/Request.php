@@ -138,6 +138,7 @@ class Request
 
     /**
      * @param      $url
+     * @param bool $verbose
      * @param bool $followlocation
      * @param int  $timeOut
      * @param int  $maxRedirecs
@@ -145,7 +146,7 @@ class Request
      * @param bool $includeHeader
      * @param bool $noBody
      */
-    public function __construct($url,$followlocation = true,$timeOut = 30,$maxRedirecs = 4,$binaryTransfer = false,$includeHeader = false,$noBody = false)
+    public function __construct($url, $verbose = false,$followlocation = true,$timeOut = 30,$maxRedirecs = 4,$binaryTransfer = false,$includeHeader = false,$noBody = false)
     {
         $this->_url = $url;
         $this->_followlocation = $followlocation;
@@ -154,6 +155,7 @@ class Request
         $this->_noBody = $noBody;
         $this->_includeHeader = $includeHeader;
         $this->_binaryTransfer = $binaryTransfer;
+        $this->verbose = $verbose;
     }
 
     /**
@@ -164,6 +166,9 @@ class Request
         $post = '';
         $this->_post = 1;
         $this->_postFields = $postFields;
+
+        if($this->verbose)
+            var_dump("POST FIELDS: ", $postFields);
 
         foreach($this->_postFields as $field => $value)
         {
@@ -220,10 +225,15 @@ class Request
      */
     public function execute()
     {
+        if($this->verbose)
+            var_dump("SENDING REQUEST TO: ", $this->_url);
 
         $this->_return = curl_exec($this->curlHandler);
         $this->_status = curl_getinfo($this->curlHandler,CURLINFO_HTTP_CODE);
         curl_close($this->curlHandler);
+
+        if($this->verbose)
+            var_dump("RETURN: ", $this->_return);
 
         if($this->getHttpStatus() == 200)
             return $this->_return;

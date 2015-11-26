@@ -34,7 +34,13 @@ $purchase = new BBM\Purchase('YOUR_CLIENT_ID', 'YOUR_CLIENT_SECRET');
  * Server environment that you want to use: sandbox or production.
  * Default: 'sandbox'
  */
-$catalog->environment = 'sandbox';
+$purchase->environment = 'sandbox';
+
+/*
+ * Verbose (true|false), enable this option and a full output will be shown.
+ * Default: false
+ */
+$purchase->verbose();
 
 // CUSTOMER DATA ARRAY
 $customer = [
@@ -53,7 +59,8 @@ $purchase->setCustomer($customer);
 
 // ADD A NEW EBOOK, EVERY NEW EBOOK MUST BE ADDED AGAIN.
 // IF YOU WANT TO ADD A SINGLE BOOK, YOU CAN USE.
-$purchase->addItem(48, 20);
+// addItem(EBOOK_ID, PRICE);
+$purchase->addItem(70, 20);
 
 // OTHERWISE, IF YOU WANT A MULTIPLE SALE, YOU CAN SET LIKE THIS
 //$purchasedEbooks = [

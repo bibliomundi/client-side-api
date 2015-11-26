@@ -68,7 +68,7 @@ class Download extends Connect
 
             // IF NO EXCEPTION IS THROWN BEFORE, THE REQUEST CAN BE SENT, SO
             // HERE WE GET THE ACCESS TOKEN FOR THIS DOWNLOAD REQUEST.
-            $request = new Server\Request(Server\Config\SysConfig::$BASE_CONNECT_URI . 'token.php');
+            $request = new Server\Request(Server\Config\SysConfig::$BASE_CONNECT_URI . 'token.php', $this->verbose);
             $request->authenticate(true, $this->clientId, $this->clientSecret);
             $request->create();
             $request->setPost(['grant_type' => Server\Config\SysConfig::$GRANT_TYPE]);
@@ -120,7 +120,7 @@ class Download extends Connect
     public function download()
     {
         // GENERATE THE CURL HANDLER
-        $request = new Server\Request(Server\Config\SysConfig::$BASE_CONNECT_URI . Server\Config\SysConfig::$BASE_DOWNLOAD . 'get.php');
+        $request = new Server\Request(Server\Config\SysConfig::$BASE_CONNECT_URI . Server\Config\SysConfig::$BASE_DOWNLOAD . 'get.php', $this->verbose);
         $request->authenticate(false);
         $request->create();
         $request->setPost($this->data);
