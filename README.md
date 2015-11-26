@@ -4,7 +4,7 @@
 All the requests are OAuth2 authenticated by client\_credentials method, and the API uses [cURL] to execute itself.
 
 ### Version
-1.0
+1.2
 
 ### Tech
 
