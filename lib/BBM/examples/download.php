@@ -40,7 +40,9 @@ $download->environment = 'sandbox';
  * Verbose (true|false), enable this option and a full output will be shown.
  * Default: false
  */
-$download->verbose();
+
+// UNCOMMENT THIS CODE TO ACTIVATE THE VERBOSE MODE
+// $download->verbose(true);
 
 $data = [
     'ebook_id' => 1, // YOU MUST 1 TO TEST, ANYONE MORE WILL BE COUNT AS AN ACTUAL DOWNLOAD.

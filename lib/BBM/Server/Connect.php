@@ -82,7 +82,7 @@ class Connect
         $this->clientSecret = $clientSecret;
     }
 
-    public function verbose($status = true)
+    public function verbose($status = false)
     {
         $this->verbose = $status;
 

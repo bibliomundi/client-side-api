@@ -46,7 +46,9 @@ $catalog->environment = 'sandbox';
  * Verbose (true|false), enable this option and a full output will be shown.
  * Default: false
  */
-$catalog->verbose();
+
+// UNCOMMENT THIS CODE TO ACTIVATE THE VERBOSE MODE
+// $catalog->verbose(true);
 
 
 if(!$catalog->validate()) // IF IS A VALID REQUEST.
