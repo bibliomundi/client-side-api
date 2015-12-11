@@ -71,11 +71,12 @@ class Download extends Connect
             $request = new Server\Request(Server\Config\SysConfig::$BASE_CONNECT_URI . 'token.php', $this->verbose);
             $request->authenticate(true, $this->clientId, $this->clientSecret);
             $request->create();
-            $request->setPost(['grant_type' => Server\Config\SysConfig::$GRANT_TYPE]);
+            $request->setPost(['grant_type' => Server\Config\SysConfig::$GRANT_TYPE, 'environment' => $this->environment]);
             $response = json_decode($request->execute());
 
             // SET THE ACCESS TOKEN TO THE NEXT REQUEST DATA.
             $this->data['access_token'] = $response->access_token;
+            $this->data['environment'] = $this->environment;
         }
         catch(Exception $e)
         {
