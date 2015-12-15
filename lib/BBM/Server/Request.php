@@ -72,6 +72,10 @@ class Request
      */
     protected $_return;
     /**
+     * @var
+     */
+    protected $_readableReturn;
+    /**
      * @var bool
      */
     protected $_includeHeader;
@@ -229,16 +233,18 @@ class Request
             var_dump("SENDING REQUEST TO: ", $this->_url);
 
         $this->_return = curl_exec($this->curlHandler);
+        $this->_readableReturn = json_decode($this->_return, true);
+
         $this->_status = curl_getinfo($this->curlHandler,CURLINFO_HTTP_CODE);
         curl_close($this->curlHandler);
 
         if($this->verbose)
             var_dump("RETURN: ", $this->_return);
 
-        if($this->getHttpStatus() == 200)
+        if(in_array($this->_status, [200, 201]) || in_array($this->getHttpStatus(), [200, 201]))
             return $this->_return;
         else
-            throw new Exception($this->_return, $this->getHttpStatus());
+            throw new Exception($this->getResponse(), $this->getHttpStatus());
     }
 
     /**
@@ -246,7 +252,23 @@ class Request
      */
     public function getHttpStatus()
     {
-        return $this->_status;
+        return $this->_readableReturn['code'];
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getHttpTitle()
+    {
+        return $this->_readableReturn['http_title'];
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getResponse()
+    {
+        return $this->_readableReturn['message'];
     }
 
     /**
@@ -254,6 +276,6 @@ class Request
      */
     public function __toString()
     {
-        return $this->_return;
+        return $this->getResponse();
     }
 }

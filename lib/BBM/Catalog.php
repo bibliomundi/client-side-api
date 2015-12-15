@@ -88,6 +88,9 @@ class Catalog extends Connect
             $request->setPost(['grant_type' => Server\Config\SysConfig::$GRANT_TYPE, 'environment' => $this->environment]);
             $response = json_decode($request->execute());
 
+            if(!isset($response->access_token))
+                throw new Exception('Cannot get the access token');
+
             // SET THE ACCESS TOKEN TO THE NEXT REQUEST DATA.
             $this->data['access_token'] = $response->access_token;
             $this->data['client_id'] = $this->clientId;

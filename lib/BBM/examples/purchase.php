@@ -28,7 +28,7 @@
  */
 
 // NEW INSTANCE OF THE PURCHASE. YOU CAN SEND MORE THEN ONE ITEM ON THE PURCHASE.
-$purchase = new BBM\Purchase('YOUR_CLIENT_ID', 'YOUR_CLIENT_SECRET');
+$purchase = new BBM\Purchase('0fde0aed1f14f224e9c5fc80cd18851f9ff463aa', 'ceea142ef2c051cfb02d2e0948520441b1312274');
 
 /*
  * Server environment that you want to use: sandbox or production.
@@ -42,7 +42,7 @@ $purchase->environment = 'sandbox';
  */
 
 // UNCOMMENT THIS CODE TO ACTIVATE THE VERBOSE MODE
-// $purchase->verbose(true);
+ $purchase->verbose(true);
 
 // CUSTOMER DATA ARRAY
 $customer = [
@@ -62,7 +62,7 @@ $purchase->setCustomer($customer);
 // ADD A NEW EBOOK, EVERY NEW EBOOK MUST BE ADDED AGAIN.
 // IF YOU WANT TO ADD A SINGLE BOOK, YOU CAN USE.
 // addItem(EBOOK_ID, PRICE);
-$purchase->addItem(1, 20);
+$purchase->addItem(3, 1);
 
 // OTHERWISE, IF YOU WANT A MULTIPLE SALE, YOU CAN SET LIKE THIS
 //$purchasedEbooks = [
