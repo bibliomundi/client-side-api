@@ -28,7 +28,7 @@
  */
 
 // NEW INSTANCE OF THE CATALOG. EVERY NEW LIST MUST BE A NEW INSTANCE.
-$catalog = new BBM\Catalog('0fde0aed1f14f224e9c5fc80cd18851f9ff463aa', 'ceea142ef2c051cfb02d2e0948520441b1312274', 'complete');
+$catalog = new BBM\Catalog('YOUR_API_KEY', 'YOUR_API_SECRET', 'SCOPE');
 
 /////////////////////////////////////////////////
 //                  NOTICE                     //
@@ -50,12 +50,19 @@ $catalog->environment = 'sandbox';
 // UNCOMMENT THIS CODE TO ACTIVATE THE VERBOSE MODE
 // $catalog->verbose(true);
 
-if(!$catalog->validate()) // IF IS A VALID REQUEST.
-    throw new \BBM\Server\Exception('Invalid Request', 400);
+try
+{
+    $catalog->validate();
+    $xml = $catalog->get(); // GET THE ONIX XML STRING, YOU CAN ECHO OR EXIT THIS STRING
+                            // BUT IS RECOMMENDED THAT YOU USE SOME XML PARSER TO INSERT THIS
+                            // INTO YOUR DATABASE.
+}
+catch(\BBM\Server\Exception $e)
+{
+    throw $e;
+}
 
-$xml = $catalog->get(); // GET THE ONIX XML STRING, YOU CAN ECHO OR EXIT THIS STRING
-                        // BUT IS RECOMMENDED THAT YOU USE SOME XML PARSER TO INSERT THIS
-                        // INTO YOUR DATABASE.
 
-header('Content-Type: application/xml; charset=utf-8');
+
+//header('Content-Type: application/xml; charset=utf-8');
 echo $xml;

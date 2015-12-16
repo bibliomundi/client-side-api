@@ -241,10 +241,15 @@ class Request
         if($this->verbose)
             var_dump("RETURN: ", $this->_return);
 
-        if(in_array($this->_status, [200, 201]) || in_array($this->getHttpStatus(), [200, 201]))
+        if($this->isSuccessfullRequest())
             return $this->_return;
         else
             throw new Exception($this->getResponse(), $this->getHttpStatus());
+    }
+
+    private function isSuccessfullRequest()
+    {
+        return ((in_array($this->_status, [200, 201]) && $this->getHttpStatus() === null) || in_array($this->getHttpStatus(), [200, 201]));
     }
 
     /**
@@ -252,7 +257,7 @@ class Request
      */
     public function getHttpStatus()
     {
-        return $this->_readableReturn['code'];
+        return @$this->_readableReturn['code'];
     }
 
     /**
@@ -260,7 +265,7 @@ class Request
      */
     public function getHttpTitle()
     {
-        return $this->_readableReturn['http_title'];
+        return @$this->_readableReturn['http_title'];
     }
 
     /**
@@ -268,7 +273,7 @@ class Request
      */
     public function getResponse()
     {
-        return $this->_readableReturn['message'];
+        return @$this->_readableReturn['message'];
     }
 
     /**

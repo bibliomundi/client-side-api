@@ -28,7 +28,7 @@
  */
 
 // NEW INSTANCE OF THE DOWNLOAD. EVERY NEW DOWNLOAD MUST BE A NEW INSTANCE.
-$download = new BBM\Download('0fde0aed1f14f224e9c5fc80cd18851f9ff463aa', 'ceea142ef2c051cfb02d2e0948520441b1312274');
+$download = new BBM\Download('YOUR_APY_KEY', 'YOUR_API_SECRET');
 
 /*
  * Server environment that you want to use: sandbox or production.
@@ -42,32 +42,29 @@ $download->environment = 'sandbox';
  */
 
 // UNCOMMENT THIS CODE TO ACTIVATE THE VERBOSE MODE
-// $download->verbose(true);
+//$download->verbose(true);
 
 $data = [
-    'ebook_id' => 8, // YOU MUST 1 TO TEST, ANYONE MORE WILL BE COUNT AS AN ACTUAL DOWNLOAD.
+    'ebook_id' => $EBOOKID, // YOU MUST 1 TO TEST, ANYONE MORE WILL BE COUNT AS AN ACTUAL DOWNLOAD.
     'transaction_time' => time(), // IT`S HIGHLY RECOMMENDED THAT YOU CANNOT CHANGE THE TRANSACTION TIME.
-    'transaction_key' => 1449147728 // YOU MUST SET THIS TO TEST, ANY OTHER ACTIVE TRANSACTION KEY WILL BE COUNT AS AN ACTUAL DOWNLOAD.
+    'transaction_key' => $TIMESTAMP // YOU MUST SET THIS TO TEST, ANY OTHER ACTIVE TRANSACTION KEY WILL BE COUNT AS AN ACTUAL DOWNLOAD.
 ];
-
-if($download->validate($data)) // IF IS A VALID REQUEST.
-    $download->download(); // EXECUTE THE DOWNLOAD.
 
 /*
  * IF YOU WANT TO HANDLE THE ERRORS, USE TRY/CATCH AS BELOW:
  */
 
-//try
-//{
-//    $download->validate($data);
-//    $download->download();
-//}
-//catch(\BBM\Server\Exception $e)
-//{
-//    // HERE YOU CAN HANDLE THE ERROR AS YOU WANT TO.
-//    // EXAMPLE:
-//    throw new TestException($e->getMessage(), $e->getCode());
-//}
+try
+{
+    $download->validate($data); // VALIDATE THE DOWNLOAD
+    $download->download(); // TRY TO DOWNLOAD THE FILE
+}
+catch(\BBM\Server\Exception $e)
+{
+    // HERE YOU CAN HANDLE THE ERROR AS YOU WANT TO.
+    // EXAMPLE:
+    die($e->getMessage());
+}
 
 /*
  * EVERY ERROR ON THE REQUEST OR IN THE VALIDATIONS WILL THROW A EXCEPTION.
