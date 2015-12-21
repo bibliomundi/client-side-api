@@ -68,22 +68,10 @@ class Purchase extends Connect
      */
     private $data = array();
 
-    /**
-     * Validate the data and get the OAuth2 access_token for this request.
-     *
-     * @return bool
-     * @throws Exception
-     */
-    public function validate()
+    private function autenticate()
     {
-        $this->data = $this->customer;
-        $this->data['items'] = $this->items;
-
-        try
+        if(!isset($this->data['access_token']))
         {
-            // VALIDATE THE DATA BEFORE SEND IT, ONLY TO AVOID UNNECESSARY REQUESTS.
-            $this->validateData();
-
             // IF NO EXCEPTION IS THROWN BEFORE, THE REQUEST CAN BE SENT, SO
             // HERE WE GET THE ACCESS TOKEN FOR THIS DOWNLOAD REQUEST.
             $request = new Server\Request(Server\Config\SysConfig::$BASE_CONNECT_URI . 'token.php', $this->verbose);
@@ -96,6 +84,26 @@ class Purchase extends Connect
             $this->data['access_token'] = $response->access_token;
             $this->data['clientID'] = $this->clientId;
             $this->data['environment'] = $this->environment;
+        }
+    }
+
+    /**
+     * Validate the data and get the OAuth2 access_token for this request.
+     *
+     * @param $bypass boolean Set if you want to bypass
+     * @return bool
+     * @throws Exception
+     */
+    public function validate()
+    {
+        $this->data = $this->customer;
+        $this->data['items'] = $this->items;
+
+        try
+        {
+            // VALIDATE THE DATA BEFORE SEND IT, ONLY TO AVOID UNNECESSARY REQUESTS.
+            $this->validateData();
+            $this->autenticate();
 
             if($this->validateData())
             {
@@ -179,6 +187,8 @@ class Purchase extends Connect
      */
     public function checkout($transactionKey, $transactionTime)
     {
+        $this->autenticate();
+
         $this->data['transactionKey'] = $transactionKey;
         $this->data['saleDate'] = date('Y-m-d H:i:s', $transactionTime);
         $this->data['items'] = $this->items;
