@@ -70,10 +70,10 @@ class Purchase extends Connect
 
     private function autenticate()
     {
+        // VERIFY IF THE ACCESS TOKEN HAS BEEN ALREADY SET
         if(!isset($this->data['access_token']))
         {
-            // IF NO EXCEPTION IS THROWN BEFORE, THE REQUEST CAN BE SENT, SO
-            // HERE WE GET THE ACCESS TOKEN FOR THIS DOWNLOAD REQUEST.
+            // GET THE ACCESS TOKEN ON THE OAUTH SERVER
             $request = new Server\Request(Server\Config\SysConfig::$BASE_CONNECT_URI . 'token.php', $this->verbose);
             $request->authenticate(true, $this->clientId, $this->clientSecret);
             $request->create();
@@ -103,23 +103,24 @@ class Purchase extends Connect
         {
             // VALIDATE THE DATA BEFORE SEND IT, ONLY TO AVOID UNNECESSARY REQUESTS.
             $this->validateData();
+
+            // LOGIN ON THE OAUTH SERVER
             $this->autenticate();
 
-            if($this->validateData())
-            {
-                $request = new Server\Request(Server\Config\SysConfig::$BASE_CONNECT_URI . Server\Config\SysConfig::$BASE_PURCHASE . 'validate.php', $this->verbose);
-                $request->authenticate(false);
-                $request->create();
-                $request->setPost($this->data);
+            // SEND THE REQUEST TO VALIDATE
+            $request = new Server\Request(Server\Config\SysConfig::$BASE_CONNECT_URI . Server\Config\SysConfig::$BASE_PURCHASE . 'validate.php', $this->verbose);
+            $request->authenticate(false);
+            $request->create();
+            $request->setPost($this->data);
 
-                // SET THE DATA TO VALIDATE.
-                $response = $request->execute();
+            // SET THE DATA TO VALIDATE.
+            $response = $request->execute();
 
-                if(!in_array($request->getHttpStatus(), [200, 201]))
-                    throw new Exception($response, $request->getHttpStatus());
+            // VERIFY THE RESPONSE CODE
+            if(!in_array($request->getHttpStatus(), [200, 201]))
+                throw new Exception($response, $request->getHttpStatus());
 
-                return $response;
-            }
+            return $response;
 
         }
         catch(Exception $e)
@@ -187,12 +188,16 @@ class Purchase extends Connect
      */
     public function checkout($transactionKey, $transactionTime)
     {
-        $this->autenticate();
-
+        // SET THE DATA TO BE SENT
+        $this->data = $this->customer;
         $this->data['transactionKey'] = $transactionKey;
         $this->data['saleDate'] = date('Y-m-d H:i:s', $transactionTime);
         $this->data['items'] = $this->items;
 
+        // LOGIN ON OAUTH SERVER
+        $this->autenticate();
+
+        // SEND THE REQUEST TO THE CHECKOUT
         $request = new Server\Request(Server\Config\SysConfig::$BASE_CONNECT_URI . Server\Config\SysConfig::$BASE_PURCHASE . 'purchase.php', $this->verbose);
         $request->authenticate(false);
         $request->create();
