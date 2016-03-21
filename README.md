@@ -81,12 +81,18 @@ catch(\BBM\Server\Exception $e)
 }
 </pre>
 
-Para cada tag &lt;produto&gt; existirá uma tag chamada &lt;NotificationType&gt; indicando a operação a ser realizada.
+Para cada tag &lt;produto&gt;, retornada pelo XML, existirá uma tag chamada &lt;NotificationType&gt; indicando a operação a ser realizada.
 
 Ex: 03 -> inserir. 04 -> Atualizar. 05 -> Deletar.
 
 # Passo 4 - Realizando uma venda
 Uma vez que você disponibilizar os ebooks em sua loja, seus clientes estarão aptos a relizar compras. Toda vez que um cliente tentar comprar um produto nosso será necessário que você valide a transação conosco e em caso de aprovação prosseguir para o checkout. Repare que a sua validação e o seu checkout e a nossa validação e o nosso checkout sãos duas coisas distintas. Você deverá sempre validar e fazer o checkout conosco para que tenhamos ciência de que a venda foi efetuada, para então podermos liberar o download para o seu cliente. Tenha isso em mente.
+
+Fluxo:
+
+- O Usuário compra um ou mais de nossos produtos.
+- Você valida a compra através da função validate();
+- Estando tudo ok você pode prosseguir para realizar tanto o seu quanto o nosso checkout.
 
 Instancie a classe Purchase passando suas credenciais como parâmetro.
 <pre>$purchase = new BBM\Purchase('YOUR_API_KEY', 'YOUR_API_SECRET');</pre>
@@ -121,18 +127,6 @@ Obs. Você pode adicionar quantos ebooks forem necessários, bastando apenas rep
 
 Em seguida faça a validação do(s) ebook(s) e posteriormente o checkout.
 
-Fluxo:
-
-- O Usuário compra um ou mais de nossos produtos.
-- Você valida a compra através da função validate();
-- Estando tudo ok você pode prosseguir para realizar tanto o seu quanto o nosso checkout.
-
-Obs.
-
-Não execute a venda antes de validar conosco, pois existem condições que podem inviabilizar a mesma, tais como sua loja não estar disponível para venda, problemas com o ebook etc.
-
-Não se esqueça de realizar o checkout conosco e você só deve fazê-lo quando o pagamento for efetivado pelo seu cliente.
-
 <pre>
 try
 {
@@ -148,6 +142,10 @@ catch(\BBM\Server\Exception $e)
 </pre>
 
 Pronto. Se tudo ocorreu bem você acaba de registrar uma venda conosco.
+
+Obs.
+- Não venda o ebook para o seu cliente sem antesvalidar conosco, pois existem condições que podem inviabilizar a venda, tais como sua loja não estar ativa, problemas com o ebook, entre outros.
+- Não se esqueça de realizar o checkout conosco e você só deve fazê-lo quando o pagamento for efetivado pelo seu cliente.
 
 # Passo 5 - Fazendo download do ebook
 Uma vez que seu cliente comprou um de nossos ebooks, você validou a compra e realizou o checkout, estará apto a fazer o download do mesmo. Caberá a você decidir a maneira de disponibilizar um link(ou algo parecido) para que seu cliente possa efetuar o download.  Conosco, tudo o que precisará fazer para efetuar o download é informar o id da transação(O mesmo que utilizou no checkout) e o id do ebook.
