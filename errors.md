@@ -3,6 +3,9 @@
 - Missing required property [clientID] for root;
 - Invalid value for [root.clientID], maximum length is [42];
 - Invalid value(s) for [root.scope], allowable values are [“complete”, “updates”].
+- The applied filter is not acceptable
+- The DRM filter must be "yes" or "no" 
+- The image size must be an integer
  
 # Quando validando uma venda
 - Your store is not active for sale, contact the support;
