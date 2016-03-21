@@ -1,56 +1,188 @@
-# Sobre o Plugin
+# Sobre a Api
+Nós somos a Bibliomundi, uma distribuidora de livros digitais e disponibilizamos esta Api com o objetivo de facilitar a integração dos ebooks cadastrados em nossa plataforma com a sua loja. Para que você possa vender nossos ebooks em sua loja serão necessários alguns passos e o auxílio de um programador.
 
-Nós somos a <a href="http://www.bibliomundi.com.br" target="blank">Bibliomundi</a>, uma distribuidora de livros digitais e disponibilizamos este Plugin, para o Prestashop, com o objetivo de integrar os ebooks cadastrados em nossa plataforma com a sua loja. Para que você possa vender nossos ebooks em sua loja é muito simples e não necessita conhecimentos em programação.
+Obs. Esta api requer o PHP como linguagem de programação e caso você trabalhe com outras linguagens, disponibilizamos um webservice completo que você pode verificar <a href="https://drive.google.com/file/d/0BzwFNhJ9FBNwS0JCSzA3cXFPYUk/view">aqui</a>.
 
-#Versão
 
-1.0
+# Requerimentos
+- <a href="http://php.net/manual/en/book.curl.php" target="blank">cURL</a>
+- <a href="http://php.net/" target="blank">PHP 5.5</a>
+- Conhecer o padrão <a href="http://www.editeur.org/83/Overview/" target="blank">Onix</a>
+- Chave de identificação e senha. Se ainda não possuir, solicite-as através do e-mail contato@bibliomundi.com.br. Responderemos em instantes.
 
-#Requerimentos
+# Fluxo
+1. Importar o nosso catálogo completo. Retornaremos para você um XML no padrão Onix com todos os ebooks cadastrados em nossa plataforma.
 
-<a href="https://www.prestashop.com" target="blank">Prestashop</a> na versão 1.6 ou maior.
+2. Inserir os ebooks em sua base de dados seguindo as normas do padrão Onix.
 
-<a href="http://php.net" target="blank">PHP</a> na versão 5.4 ou maior.
+3. Realizar atualizações diárias para checar se existem novos ebooks, se existem ebooks a serem atualizados(Mudança de nome, por exemplo) ou se existem ebooks que requerem que você delete de sua base(Por não estarem mais sendo distribuídos por nós, por exemplo). Retornaremos para você um XML no padrão Onix com os ebooks que precisam ser atualizados, inseridos ou deletados.
 
-Extensão <a href="http://php.net/manual/pt_BR/book.mcrypt.php" target="blank">mcrypt</a> do PHP
+4. Disponibilizar os ebooks para venda em sua loja.
 
-#Instalação
+5. Liberar o download do ebook para o cliente. 
+ 
+# Instalação
 
-Baixe o arquivo e renomei a pasta dentro do zip para "bibliomundi"(NECESSÁRIO) e na aba de criação de módulos do Prestahop faça o upload. Automaticamentne o nosso Módulo aparecerá em sua lista. Clique em instalar. Um alerta será exibido. Apenas clique em “prosseguir com a instalação”.
+Basta apenas fazer o download(Ou clonar), incluir em seu projeto e em seguida fazer uma chamada ao arquivo “autoload.php”, que se encontra dentro da pasta "lib". Pronto, você já tem acesso a todas as funcionalidades da Api.
 
-Obs. Caso esteja tendo dificuldades na instalação, configuração ou importação dos ebooks, disponibilizamos um tutorial com ilustrações. Você pode visualizar <a href="https://drive.google.com/open?id=0BzwFNhJ9FBNwV3BoTHdqeEl0WGc">aqui</a>.
+<pre>Ex: require 'lib/autoload.php';</pre>
 
-#Configurando o Módulo
+# Passo 1 - Importando os ebooks para a sua loja
+Intancie a classe Catalog passando suas credencias como parâmetro.
+<pre>$catalog = new BBM\Catalog('YOUR_API_KEY', 'YOUR_API_SECRET');</pre>
+Defina se o ambiente que irá importar, os nossos ebooks, é o de produção ou de testes.
+<pre>
+$catalog->environment = 'production';
+ou
+$catalog->environment = 'sandbox'; 
+</pre>
 
-Após instalar o Módulo com sucesso clique em configurar. Na tela inicial você terá apenas que escolher como deseja que os autores dos nossos ebooks sejam exibidos em sua loja. Escolha a opção que mais lhe agrada e clique em prosseguir.
+O trecho de código a seguir valida suas credenciais e importa os ebooks.
+<pre>
+try
+{
+    $catalog->validate();//Valida suas credenciais
+    $xml = $catalog->get();//Retorna um <a href="https://github.com/xxMAGRAOxx/magraoDocs/blob/master/onix_example.xml" target="blank">XML</a>, no formato string e no padrão Onix, contendo todos os ebooks cadastrados em nossa plataforma
+}
+catch(\BBM\Server\Exception $e)
+{
+    var_dump($e);
+}
+</pre>
 
-#Importando os Ebooks
+Cada tag &lt;Produto&gt; retornada pelo <a href="https://github.com/xxMAGRAOxx/magraoDocs/blob/master/onix_example.xml" target="blank">XML</a> é um ebook. Você irá percorrer todas elas e, seguindo normas do padrão Onix, inserindo em sua base de dados.
 
-Esse é o momento em que você irá importar os ebooks cadastrados em nossa plataforma para a sua loja. Você precisa apenas informar a chave e a senha que enviamos para você, escolher a o tipo da operação, o ambiente e clique em importar. 
-Atenção. O tempo da importação irá variar de acordo com vários fatores, tais como a  velocidade do seu servidor e da conexão de sua internet!
+# Passo 2 - Inserindo os ebooks em sua loja
+Uma vez com o <a href="https://github.com/xxMAGRAOxx/magraoDocs/blob/master/onix_example.xml" target="blank">XML</a> dos nossos ebooks, você pode trabalhar da maneira que achar melhor, mas recomendamos fortemente que utilize um parser, como o SimpleXML do php, por exemplo. Será de sua responsabilidade inserir os ebooks com as informações mínimas necessárias em sua loja. Recomendamos também que não insira ebooks que não estão disponíveis para venda, no momento da importação, e para isso você deverá realizar uma checagem através das tags &lt;PublishingStatus&gt; e &lt;ProductAvailability&gt;. Clicando <a target="blank" href="https://github.com/xxMAGRAOxx/magraoDocs/blob/master/onix_example.xml">aqui</a> você pode ver um exemplo do XML, que retornaremos para você, no padrão Onix e com as informações que consideramos essenciais.
 
-#Atualizações Diárias
-
+# Passo 3 - Realizando atualizações diárias
 Realizamos atualizações diárias em nosso sistema e você precisará, também diariamente, criar uma rotina para checar se existem ebooks a serem inseridos, atualizados ou deletados.
 Recomendamos que crie uma agendador de tarefas para rodar entre 01 e 06 da manhã(GMT-3) afim de evitar que ebooks sejam disponibilizados com dados defasados podendo assim causar erros na venda.
-Tudo o que você precisa fazer é executar, periodicamente, o arquivo "cron.php" que se encontra no diretório "modules/bibliomundi".
 
-Atenção. Esta etapa requer conhecimentos de infra-estrutura. Sugerimos que contacte o administrador do servidor. 
+Passe apenas um terceiro parâmetro chamado 'updates'.
 
-Você não irá conseguir fazer a chamada via url, como por exemplo "/seuprestashop.com.br/admin/modules/bibliomundi/cron.php", pois o prestashop requer um token de autenticação e o mesmo é dinâmico, portanto você deverá executar o arquivo via linha de comando. Ex: "php /home/USER/public_html/modules/bibliomundi/cron.php"
+<pre>$catalog = new BBM\Catalog('YOUR_API_KEY', 'YOUR_API_SECRET', 'updates');</pre>
 
-#Observações
+Não muda nada na forma de fazer a requisição.
 
-- Não se esqueça de renomear a pasta, que se encontra na raiz do zip, para "bibliomundi". Sem isso você não conseguirá instalar o módulo.
-- Após desinstalar o nosso módulo, todos os nossos ebooks serão removidos de sua lista de produtos, bem como suas respectivas categorias, características e etiquetas.
-- Execute as atualizações entre 01 e 06 da manhã(GMT-3).
+<pre>
+$catalog->environment = 'production';
+ou
+$catalog->environment = 'sandbox';
 
-#FAQ
+try
+{
+    $catalog->validate();//Valida suas credenciais
+    $xml = $catalog->get();//Retorna um XML com os ebooks e suas respectivas operações a serem relizadas(insert, update ou delete) no formato string e no padrão Onix
+}
+catch(\BBM\Server\Exception $e)
+{
+    var_dump($e);
+}
+</pre>
 
-Após a instalação do módulo os meus produtos não estão sendo pesquisáveis em minha loja, por quê?.
+Para cada tag &lt;produto&gt; existirá uma tag chamada &lt;NotificationType&gt; indicando a operação a ser realizada.
 
-R. Na administração, navegue até Preferências > Buscar e clique em Reconstruir indíces.
+Ex: 03 -> inserir. 04 -> Atualizar. 05 -> Deletar.
 
-Por que os produtos da Bibliomundi aparecem como "sem estoque" ? 
+# Passo 4 - Realizando uma venda
+Uma vez que você disponibilizar os ebooks em sua loja, seus clientes estarão aptos a relizar compras. Toda vez que um cliente tentar comprar um produto nosso será necessário que você valide a transação conosco e em caso de aprovação prosseguir para o checkout. Repare que a sua validação e o seu checkout e a nossa validação e o nosso checkout sãos duas coisas distintas. Você deverá sempre validar e fazer o checkout conosco para que tenhamos ciência de que a venda foi efetuada, para então podermos liberar o download para o seu cliente. Tenha isso em mente.
 
-R. Não há limitações de unidade para os nossos ebooks e no Prestashop não existe uma maneira nativa de configurar isto, logo, foi necessário alguns ajustes. Simplesmente ignore está mensagem. Não se preocupe.
+Instancie a classe Purchase passando suas credenciais como parâmetro.
+<pre>$purchase = new BBM\Purchase('YOUR_API_KEY', 'YOUR_API_SECRET');</pre>
+
+Escolha o ambiente
+<pre>
+$catalog->environment = 'production';
+ou
+$catalog->environment = 'sandbox';
+</pre>
+
+Envie para nós, os dados do Usuário que efetuou a compra, respeitando as regras abaixo.
+<pre>
+$customer = [
+    'customerIdentificationNumber' => 1, // INT, YOUR STORE CUSTOMER ID
+    'customerFullname' => 'CUSTOMER NAME', // STRING, CUSTOMER FULL NAME
+    'customerEmail' => 'customer@email.com', // STRING, CUSTOMER EMAIL
+    'customerGender' => 'm', // ENUM, CUSTOMER GENDER, USE m OR f (LOWERCASE!! male or female)
+    'customerBirthday' => '1991/11/03', // STRING, CUSTOMER BIRTH DATE, USE Y/m/d (XXXX/XX/XX)
+    'customerCountry' => 'BR', // STRING, 2 CHAR STRING THAT INDICATE THE CUSTOMER COUNTRY (BR, US, ES, etc)
+    'customerZipcode' => '31231223', // STRING, POSTAL CODE, ONLY NUMBERS
+    'customerState' => 'RJ' // STRING, 2 CHAR STRING THAT INDICATE THE CUSTOMER STATE (RJ, SP, NY, etc)
+];
+
+$purchase->setCustomer($customer);
+</pre>
+
+Em seguida adicione o ebook passando o ID e preço do mesmo.
+<pre>$purchase->addItem($ebookID, $ebookPrice);</pre>
+
+Obs. Você pode adicionar quantos ebooks forem necessários, bastando apenas repetir o procedimento para cada ebook.
+
+Em seguida faça a validação do(s) ebook(s) e posteriormente o checkout.
+
+Fluxo:
+
+- O Usuário compra um ou mais de nossos produtos.
+- Você valida a compra através da função validate();
+- Estando tudo ok você pode prosseguir para realizar tanto o seu quanto o nosso checkout.
+
+Obs.
+
+Não execute a venda antes de validar conosco, pois existem condições que podem inviabilizar a mesma, tais como sua loja não estar disponível para venda, problemas com o ebook etc.
+
+Não se esqueça de realizar o checkout conosco e você só deve fazê-lo quando o pagamento for efetivado pelo seu cliente.
+
+<pre>
+try
+{
+    $purchase->validate();
+    
+    //A transaction key pode ser qualquer coisa que desejar, mas recomendamos que seja a mesma de sua transação. Ela será requisitada quando for efetuar o download do(s) ebook(s) atrelados a este checkout.
+    $purchase->checkout('TRANSACTION_KEY', time());
+}
+catch(\BBM\Server\Exception $e)
+{
+    var_dump($e);
+}
+</pre>
+
+Pronto. Se tudo ocorreu bem você acaba de registrar uma venda conosco.
+
+# Passo 5 - Fazendo download do ebook
+Uma vez que seu cliente comprou um de nossos ebooks, você validou a compra e realizou o checkout, estará apto a fazer o download do mesmo. Caberá a você decidir a maneira de disponibilizar um link(ou algo parecido) para que seu cliente possa efetuar o download.  Conosco, tudo o que precisará fazer para efetuar o download é informar o id da transação(O mesmo que utilizou no checkout) e o id do ebook.
+
+Instancie a classe download passando suas credenciais como parâmetro
+<pre>$download = new BBM\Download('YOUR_APY_KEY', 'YOUR_API_SECRET');</pre>
+
+Escolha o ambiente
+<pre>
+$catalog->environment = 'production';
+ou
+$catalog->environment = 'sandbox';
+</pre>
+
+<pre>
+$data = [
+    'ebook_id' => $EBOOKID,
+    'transaction_time' => time(),
+    'transaction_key' => $TIMESTAMP // A chave que voce utilizou para realizar o checkout
+];
+</pre>
+
+<pre>
+try
+{
+    $download->validate($data);
+    $download->download();// Faz o download do ebook
+}
+catch(\BBM\Server\Exception $e)
+{
+    var_dump($e);
+}
+</pre>
+
+Se tudo ocorreu bem, ao chamar a função download(), automaticamente o arquivo do ebook será baixado para a máquina do cliente, pois trata-se de um EndPoint.
+
+# Tratando erros
+Erros podem acontecer em todas as etapas(Complete, Update, Validate, Checkout e Download) e será de sua responsabilidade tratá-los e informar ao Usuário, se for o caso. Independente da requisição que esteja sendo feita, sempre retornaremos uma Exception com o código e mensagem do erro. Você pode verificar <a href="https://github.com/xxMAGRAOxx/magraoDocs/blob/master/errors.md" target="blank">aqui</a> uma lista dos possíveis erros que podem acontecer e suas respectivas etapas. Disponibilizamos também uma <a href="https://github.com/bibliomundi/client-side-api/tree/master/docs/" target="blank">documentação</a> gerada pelo <a target="blank" href="http://www.phpdoc.org/" target="blank">PHPDoc.</a>
