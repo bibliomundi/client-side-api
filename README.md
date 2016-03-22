@@ -37,7 +37,24 @@ ou
 $catalog->environment = 'sandbox'; 
 </pre>
 
-O trecho de código a seguir valida suas credenciais e importa os ebooks.
+O trecho de código a seguir é opcional. Possibilita que você filtre pos ebooks que possuem, ou não, proteção DRM.
+<pre>
+$catalog->filters( array('drm' => 'no') );//Traz somente ebooks que não possuem proteção
+ou
+$catalog->filters( array('drm' => 'yes') );//Traz somente ebooks que possuem proteção
+</pre>
+
+Outro trecho de código opcional. Lhe fornecemos a opção de trazer as capas dos ebooks em um tamanho pré-determinado, permitindo que você economize espaço em disco, por exemplo.
+
+<pre>
+$catalog->filters( array('image_height' => 500) );//Traz as capas dos ebooks com altura de 500px
+...
+$catalog->filters( array('image_width' => 700) );//Traz as capas dos ebooks com largura de 700px
+...
+$catalog->filters( array('image_width' => 1024, 'image_height' => 768) );//Traz as capas dos ebooks com largura de 1080px e largura de 768px
+</pre>
+
+Por fim, valide suas credenciais e importe os ebooks.
 <pre>
 try
 {
@@ -51,6 +68,8 @@ catch(\BBM\Server\Exception $e)
 </pre>
 
 Cada tag &lt;Produto&gt; retornada pelo <a href="https://github.com/bibliomundi/client-side-api/blob/master/onix-essential.xml" target="blank">XML</a> é um ebook. Você irá percorrer todas elas e, seguindo normas do padrão Onix, inserindo em sua base de dados.
+
+Para maiores detalhes, veja um exemplo <a href="https://github.com/bibliomundi/client-side-api/tree/master/lib/BBM/examples/catalog.php">aqui<a/>.
 
 # Passo 2 - Inserindo os ebooks em sua loja
 Uma vez com o <a href="https://github.com/bibliomundi/client-side-api/blob/master/onix-essential.xml" target="blank">XML</a> dos nossos ebooks, você pode trabalhar da maneira que achar melhor, mas recomendamos fortemente que utilize um parser, como o SimpleXML do php, por exemplo. Será de sua responsabilidade inserir os ebooks com as informações mínimas necessárias em sua loja. Recomendamos também que não insira ebooks que não estão disponíveis para venda, no momento da importação, e para isso você deverá realizar uma checagem através das tags &lt;PublishingStatus&gt; e &lt;ProductAvailability&gt;. Clicando <a target="blank" href="https://github.com/bibliomundi/client-side-api/blob/master/onix-essential.xml">aqui</a> você pode ver um exemplo do XML, que retornaremos para você, no padrão Onix e com as informações que consideramos essenciais.
@@ -143,6 +162,8 @@ catch(\BBM\Server\Exception $e)
 
 Pronto. Se tudo ocorreu bem você acaba de registrar uma venda conosco.
 
+Para maiores detalhes, veja um exemplo <a href="https://github.com/bibliomundi/client-side-api/tree/master/lib/BBM/examples/purchase.php">aqui<a/>.
+
 Obs.
 - Não venda o ebook para o seu cliente sem antesvalidar conosco, pois existem condições que podem inviabilizar a venda, tais como sua loja não estar ativa, problemas com o ebook, entre outros.
 - Não se esqueça de realizar o checkout conosco e você só deve fazê-lo quando o pagamento for efetivado pelo seu cliente.
@@ -181,6 +202,8 @@ catch(\BBM\Server\Exception $e)
 </pre>
 
 Se tudo ocorreu bem, ao chamar a função download(), automaticamente o arquivo do ebook será baixado para a máquina do cliente, pois trata-se de um Endpoint.
+
+Para maiores detalhes, veja um exemplo <a href="https://github.com/bibliomundi/client-side-api/tree/master/lib/BBM/examples/download.php">aqui<a/>.
 
 # Tratando erros
 Erros podem acontecer em todas as etapas(Complete, Update, Validate, Checkout e Download) e será de sua responsabilidade tratá-los e informar ao Usuário, se for o caso. Independente da requisição que esteja sendo feita, sempre retornaremos uma Exception com informações sobre o erro. Você pode verificar <a href="https://github.com/bibliomundi/client-side-api/blob/master/errors.md" target="blank">aqui</a> uma lista dos possíveis erros que podem acontecer e suas respectivas etapas. Disponibilizamos também uma <a href="https://github.com/bibliomundi/client-side-api/tree/master/docs/" target="blank">documentação</a> gerada pelo <a target="blank" href="http://www.phpdoc.org/" target="blank">PHPDoc.</a>
