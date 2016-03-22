@@ -37,7 +37,7 @@ ou
 $catalog->environment = 'sandbox'; 
 </pre>
 
-O trecho de código a seguir é opcional. Possibilita que você filtre pos ebooks que possuem, ou não, proteção DRM.
+O trecho de código a seguir é opcional. Possibilita que você filtre por ebooks que possuem, ou não, proteção DRM.
 <pre>
 $catalog->filters( array('drm' => 'no') );//Traz somente ebooks que não possuem proteção
 ou
