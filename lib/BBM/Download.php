@@ -145,7 +145,6 @@ class Download extends Connect
             {
                 header('Content-Type: application/epub+zip');
                 header('Content-Disposition: attachment; filename="'.md5(time()).'.epub"');
-                $request = utf8_decode($request->__toString());
             }
             else
             {
@@ -159,6 +158,7 @@ class Download extends Connect
             header("Content-Length: ".strlen($request));
 
             // EXIT THE PROGRAM WITH THE BINARY REQUEST.
+            $request = utf8_decode($request->__toString());
             exit($request);
         }
     }
