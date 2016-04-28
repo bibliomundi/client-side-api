@@ -1,65 +1,63 @@
-# Sobre a Api
-Nós somos a Bibliomundi, uma distribuidora de livros digitais e disponibilizamos esta Api com o objetivo de facilitar a integração dos ebooks cadastrados em nossa plataforma com a sua loja. Para que você possa vender nossos ebooks em sua loja serão necessários alguns passos e o auxílio de um programador.
+#About the API
+We are Bibliomundi, a ebook distributor and have made this plugin, Prestashop,with the purpose of integrating our ebooks with your store´s platform. In order to commercialize our ebooks at your store it does require knowledge of programing.
+OBS: This API requires knowledge of PHP coding. In case you work with other coding standards, we have published the complete webservice which may be accessed through this link.
 
-Obs. Esta api requer o PHP como linguagem de programação e caso você trabalhe com outras linguagens, disponibilizamos um webservice completo que você pode verificar <a href="https://drive.google.com/file/d/0BzwFNhJ9FBNwS0JCSzA3cXFPYUk/view">aqui</a>.
 
-
-# Requerimentos
+# Requirements
 - <a href="http://php.net/manual/en/book.curl.php" target="blank">cURL</a>
 - <a href="http://php.net/" target="blank">PHP 5.5</a>
-- Conhecer o padrão <a href="http://www.editeur.org/83/Overview/" target="blank">Onix</a>
-- Chave de identificação e senha. Se ainda não possuir, solicite-as através do e-mail contato@bibliomundi.com.br. Responderemos em instantes.
+- Knowledge of <a href="http://www.editeur.org/83/Overview/" target="blank">Onix</a>
+- Key and Secret. If you do not possess these credentials, please contact us at contato@bibliomundi.com.br.
 
-# Fluxo
-1. Importar o nosso catálogo completo. Retornaremos para você um XML no padrão Onix com todos os ebooks cadastrados em nossa plataforma.
+# Workflow
+1. Impor our complete calalogue. We will deliver the complete ONIX standard XML with all o four active ebooks.
 
-2. Inserir os ebooks em sua base de dados seguindo as normas do padrão Onix.
+2. Insert the ebooks from our database following the ONIX standard.
 
-3. Realizar atualizações diárias para checar se existem novos ebooks, se existem ebooks a serem atualizados(Mudança de nome, por exemplo) ou se existem ebooks que requerem que você delete de sua base(Por não estarem mais sendo distribuídos por nós, por exemplo). Retornaremos para você um XML no padrão Onix com os ebooks que precisam ser atualizados, inseridos ou deletados.
+3. Update daily to verify if there are new ebooks, in case of a metadata update (e.g. title change) or if there are ebooks that have been deactivated which need to be removed from sale. We deliver an ONIX standard XML with the ebooks that require updating, adding or deleting.
 
-4. Disponibilizar os ebooks para venda em sua loja.
+4. Enable the ebooks for sale at your store.
 
-5. Liberar o download do ebook para o cliente. 
+5. Enable the download for a customer.. 
  
 # Instalação
 
-Basta apenas fazer o download(Ou clonar), incluir em seu projeto e em seguida fazer uma chamada ao arquivo “autoload.php”, que se encontra dentro da pasta "lib". Pronto, você já tem acesso a todas as funcionalidades da Api.
+Simply download (or clone), add to your Project and then make a call to the file “autoload.php”, which is located within the &quot;lib&quot; folder. Concluding this step, you will have access to all of the API´s functionalities.
 
-<pre>Ex: require 'lib/autoload.php';</pre>
+<pre>Ex: require &#39;lib/autoload.php&#39;</pre>
 
-# Passo 1 - Importando os ebooks para a sua loja
-Intancie a classe Catalog passando suas credencias como parâmetro.
+# Passo 1 - Instance the Catalogue class by sending your credentials as parametre.
 <pre>$catalog = new BBM\Catalog('YOUR_API_KEY', 'YOUR_API_SECRET');</pre>
-Defina se o ambiente que irá importar, os nossos ebooks, é o de produção ou de testes.
+Define if the environmente you will import oure books will be Production or Sandbox.
 <pre>
 $catalog->environment = 'production';
 ou
 $catalog->environment = 'sandbox'; 
 </pre>
 
-O trecho de código a seguir é opcional. Possibilita que você filtre por ebooks que possuem, ou não, proteção DRM.
-<pre>
-$catalog->filters( array('drm' => 'no') );//Traz somente ebooks que não possuem proteção
+The following code is optional. It allows you to filter for ebooks which contain or not DRM protection.
+<pre> 
+$catalog->filters( array('drm' => 'no') );)//Will only deliver unprotected
 ou
-$catalog->filters( array('drm' => 'yes') );//Traz somente ebooks que possuem proteção
+$catalog->filters( array('drm' => 'yes') );)// Will only deliver protected
 </pre>
 
-Outro trecho de código opcional. Lhe fornecemos a opção de trazer as capas dos ebooks em um tamanho pré-determinado, permitindo que você economize espaço em disco, por exemplo.
+Another optional code. We offer the option of importing the ebook covers at a pre-determined size, allowing you to save on server space, for example.
 
 <pre>
-$catalog->filters( array('image_height' => 500) );//Traz as capas dos ebooks com altura de 500px
+$catalog->filters( array('image_height' => 500) ););//Delivers covers at the height of 500px
 ...
-$catalog->filters( array('image_width' => 700) );//Traz as capas dos ebooks com largura de 700px
+$catalog->filters( array('image_width' => 700) ););//Delivers covers at the width of 700px
 ...
-$catalog->filters( array('image_width' => 1024, 'image_height' => 768) );//Traz as capas dos ebooks com largura de 1024px e altura de 768px
+$catalog->filters( array('image_width' => 1024, 'image_height' => 768) );//Delivers covers at the width of 1024px e height de 768px
 </pre>
 
-Por fim, valide suas credenciais e importe os ebooks.
+At the end of this step, validate your credentials and import de ebooks.
 <pre>
 try
 {
-    $catalog->validate();//Valida suas credenciais
-    $xml = $catalog->get();//Retorna um <a href="https://github.com/bibliomundi/client-side-api/blob/master/onix-essential.xml" target="blank">XML</a>, no formato string e no padrão Onix, contendo todos os ebooks cadastrados em nossa plataforma
+    $catalog->validate();//Validate your transactions
+    $xml = $catalog->get();//Returns an <a href="https://github.com/bibliomundi/client-side-api/blob/master/onix-essential.xml" target="blank">XML</a>, with the string format and ONIX standard, containing all the active ebooks in our platform
 }
 catch(\BBM\Server\Exception $e)
 {
@@ -67,22 +65,21 @@ catch(\BBM\Server\Exception $e)
 }
 </pre>
 
-Cada tag &lt;Product&gt; retornada pelo <a href="https://github.com/bibliomundi/client-side-api/blob/master/onix-essential.xml" target="blank">XML</a> é um ebook. Você irá percorrer todas elas e, seguindo normas do padrão Onix, inserindo em sua base de dados.
+Each tag &lt;Product&gt; returned by <a href="https://github.com/bibliomundi/client-side-api/blob/master/onix-essential.xml" target="blank">XML</a> is an ebook. You will run through all of them, following the ONIX standard and insert them into your database.
 
-Para maiores detalhes, veja um exemplo <a href="https://github.com/bibliomundi/client-side-api/tree/master/lib/BBM/examples/catalog.php">aqui<a/>.
+For more details, view an example <a href="https://github.com/bibliomundi/client-side-api/tree/master/lib/BBM/examples/catalog.php">here<a/>.
 
-# Passo 2 - Inserindo os ebooks em sua loja
-Uma vez com o <a href="https://github.com/bibliomundi/client-side-api/blob/master/onix-essential.xml" target="blank">XML</a> dos nossos ebooks, você pode trabalhar da maneira que achar melhor, mas recomendamos fortemente que utilize um parser, como o SimpleXML do php, por exemplo. Será de sua responsabilidade inserir os ebooks com as informações mínimas necessárias em sua loja. Recomendamos também que não insira ebooks que não estão disponíveis para venda, no momento da importação, e para isso você deverá realizar uma checagem através das tags &lt;PublishingStatus&gt; e &lt;ProductAvailability&gt;. Clicando <a target="blank" href="https://github.com/bibliomundi/client-side-api/blob/master/onix-essential.xml">aqui</a> você pode ver um exemplo do XML, que retornaremos para você, no padrão Onix e com as informações que consideramos essenciais.
+# Passo 2 - Inserting the ebooks in your store
+Once having imported our ebooks´s <a href="https://github.com/bibliomundi/client-side-api/blob/master/onix-essential.xml" target="blank">XML</a>, you may work in the matter you prefer but we strongly recommend using a Parser, like PHP´s Simple XML for example. It will be your responsibility to insert the ebooks with a minimum amount of basic information. We also recommend not inserting titles which are not available for sale, and for that you must check the tags &lt;PublishingStatus&gt; and &lt;ProductAvailability&gt;. By clicking <a target="blank" href="https://github.com/bibliomundi/client-side-api/blob/master/onix-essential.xml">here</a> you will see an example of the XML, which we deliver to you using ONIX standard, and the information we consider most essential.
 
 # Passo 3 - Realizando atualizações diárias
-Realizamos atualizações diárias em nosso sistema e você precisará, também diariamente, criar uma rotina para checar se existem ebooks a serem inseridos, atualizados ou deletados.
-Recomendamos que crie uma agendador de tarefas para rodar entre 01 e 06 da manhã(GMT-3) afim de evitar que ebooks sejam disponibilizados com dados defasados podendo assim causar erros na venda.
+Our routine is to update our systems daily and you will have to create one too.Create a daily routine to verify if there are new titles added, updated or removed. We recommend you create a task reminder to run between 01 and 06 AM (GMT -3) in order to avoid displaying ebooks with outdated information resulting in an error generation.
 
-Passe apenas um terceiro parâmetro chamado 'updates'.
+Simply add a third parameter called &#39;updates&#39;.
 
 <pre>$catalog = new BBM\Catalog('YOUR_API_KEY', 'YOUR_API_SECRET', 'updates');</pre>
 
-Não muda nada na forma de fazer a requisição.
+It does not change the routine for the usual request.
 
 <pre>
 $catalog->environment = 'production';
@@ -92,7 +89,9 @@ $catalog->environment = 'sandbox';
 try
 {
     $catalog->validate();//Valida suas credenciais
-    $xml = $catalog->get();//Retorna um XML com os ebooks e suas respectivas operações a serem relizadas(insert, update ou delete) no formato string e no padrão Onix
+    $xml = $catalog->get();//Returns an XML with the ebooks and their respective routines (insert, update or delete) in a string format and ONIX
+
+standard
 }
 catch(\BBM\Server\Exception $e)
 {
@@ -100,30 +99,30 @@ catch(\BBM\Server\Exception $e)
 }
 </pre>
 
-Para cada tag &lt;Product&gt;, retornada pelo XML, existirá uma tag chamada &lt;NotificationType&gt; indicando a operação a ser realizada.
+For each tag &lt;Product&gt;, returned by the XML, there is a tag named &lt;NotificationType&gt; indicating the operation to be performed.
 
 Ex: 03 -> inserir. 04 -> Atualizar. 05 -> Deletar.
 
 # Passo 4 - Realizando uma venda
-Uma vez que você disponibilizar os ebooks em sua loja, seus clientes estarão aptos a realizar compras. Toda vez que um cliente tentar comprar um produto nosso será necessário que você valide a transação conosco e em caso de aprovação prosseguir para o checkout. Repare que a sua validação e o seu checkout e a nossa validação e o nosso checkout sãos duas coisas distintas. Você deverá sempre validar e fazer o checkout conosco para que tenhamos ciência de que a venda foi efetuada, para então podermos liberar o download para o seu cliente. Tenha isso em mente.
+Once you have finished importing the catalogue, your consumers will be able to purchase the ebooks. Every time a consumer attempts to purchase an ebook from us, it is required that you validate the transaction with us before they head to the checkout. Notice that your validation and checkout and our validation and checkout are two different processes. You must always validate and checkout with us so that we may be aware that the transaction has been made so that we may approve the ebook´s download. Keep that in mind.
 
-Fluxo:
+Workflow::
 
-- O Usuário compra um ou mais de nossos produtos.
-- Você valida a compra através da função validate();
-- Estando tudo ok você pode prosseguir para realizar tanto o seu quanto o nosso checkout.
+- Consumer purchases one or more of our products.
+- You validade the transaction through the Validate() funcition.
+- If confirmed you may proceed to both your and our checkouts.
 
-Instancie a classe Purchase passando suas credenciais como parâmetro.
+Instance a Purchase class by sending your credentials as parameters.
 <pre>$purchase = new BBM\Purchase('YOUR_API_KEY', 'YOUR_API_SECRET');</pre>
 
-Escolha o ambiente
+Choose your environment.
 <pre>
 $catalog->environment = 'production';
 ou
 $catalog->environment = 'sandbox';
 </pre>
 
-Envie para nós, os dados do Usuário que efetuou a compra, respeitando as regras abaixo.
+Send us the user information that made the transaction respecting the rules below.
 <pre>
 $customer = [
     'customerIdentificationNumber' => 1, // INT, YOUR STORE CUSTOMER ID
@@ -139,19 +138,19 @@ $customer = [
 $purchase->setCustomer($customer);
 </pre>
 
-Em seguida adicione o ebook passando o ID e preço do mesmo.
+Then insert the ebook by adding its ID and Price.
 <pre>$purchase->addItem($ebookID, $ebookPrice);</pre>
 
-Obs. Você pode adicionar quantos ebooks forem necessários, bastando apenas repetir o procedimento para cada ebook.
+OBS: You may add as many ebooks as necessary by simply repeating the procedure with each ebook.
 
-Em seguida faça a validação do(s) ebook(s) e posteriormente o checkout.
+Then validate the ebooks and follow to checkout.
 
 <pre>
 try
 {
     $purchase->validate();
     
-    //A transaction key pode ser qualquer coisa que desejar, mas recomendamos que seja a mesma de sua transação. Ela será requisitada quando for efetuar o download do(s) ebook(s) atrelados a este checkout.
+    //A transaction key may be anything but we recommend using the same as the effective transaction. It will be requested when the attempting to download the ebooks related to this checkout.
     $purchase->checkout('TRANSACTION_KEY', time());
 }
 catch(\BBM\Server\Exception $e)
@@ -160,21 +159,21 @@ catch(\BBM\Server\Exception $e)
 }
 </pre>
 
-Pronto. Se tudo ocorreu bem você acaba de registrar uma venda conosco.
+Done. If everything has run smoothly, you have just registered a sale with us.
 
-Para maiores detalhes, veja um exemplo <a href="https://github.com/bibliomundi/client-side-api/tree/master/lib/BBM/examples/purchase.php">aqui<a/>.
+For more detailes, se the following example <a href="https://github.com/bibliomundi/client-side-api/tree/master/lib/BBM/examples/purchase.php">here<a/>.
 
-Obs.
-- Não venda o ebook para o seu cliente sem antesvalidar conosco, pois existem condições que podem inviabilizar a venda, tais como sua loja não estar ativa, problemas com o ebook, entre outros.
-- Não se esqueça de realizar o checkout conosco e você só deve fazê-lo quando o pagamento for efetivado pelo seu cliente.
+OBS..
+- Do not sell the ebook to your customer without validating with us first,because there are conditions which may invalidate the sale such as your store not being active or issues with the ebook.
+- Do not forget to confirm the checkout with us and you must only do so once the payment is confirmed with your client.
 
 # Passo 5 - Fazendo download do ebook
-Uma vez que seu cliente comprou um de nossos ebooks, você validou a compra e realizou o checkout, estará apto a fazer o download do mesmo. Caberá a você decidir a maneira de disponibilizar um link(ou algo parecido) para que seu cliente possa efetuar o download.  Conosco, tudo o que precisará fazer para efetuar o download é informar o id da transação(O mesmo que utilizou no checkout) e o id do ebook.
+Once your customer has purchased one of our ebooks, you validated the transaction and made the checkout, they will be able to download the ebook. It will be your decision the way in which to make the link (or similar) available for your client to make the download. With us, all you need to download the ebook is inform us the transaction ID (the same used at the checkout) and the ebook´s ID.
 
-Instancie a classe download passando suas credenciais como parâmetro
+Instance the download class by delivering your credentials as parameters.
 <pre>$download = new BBM\Download('YOUR_APY_KEY', 'YOUR_API_SECRET');</pre>
 
-Escolha o ambiente
+Select the environment.
 <pre>
 $catalog->environment = 'production';
 ou
@@ -185,7 +184,7 @@ $catalog->environment = 'sandbox';
 $data = [
     'ebook_id' => $EBOOKID,
     'transaction_time' => time(),
-    'transaction_key' => $TIMESTAMP // A chave que voce utilizou para realizar o checkout
+    'transaction_key' => $TIMESTAMP // The key you have used to confirm the checkout
 ];
 </pre>
 
@@ -201,9 +200,9 @@ catch(\BBM\Server\Exception $e)
 }
 </pre>
 
-Se tudo ocorreu bem, ao chamar a função download(), automaticamente o arquivo do ebook será baixado para a máquina do cliente, pois trata-se de um Endpoint.
+If everything runs smoothly, as you request the download() function, the ebook file will be automatically downloaded to the consumer´s gadget since it is an Endpoint.
 
-Para maiores detalhes, veja um exemplo <a href="https://github.com/bibliomundi/client-side-api/tree/master/lib/BBM/examples/download.php">aqui<a/>.
+For more details, se the following example <a href="https://github.com/bibliomundi/client-side-api/tree/master/lib/BBM/examples/download.php">aqui<a/>.
 
 # Tratando erros
-Erros podem acontecer em todas as etapas(Complete, Update, Validate, Checkout e Download) e será de sua responsabilidade tratá-los e informar ao Usuário, se for o caso. Independente da requisição que esteja sendo feita, sempre retornaremos uma Exception com informações sobre o erro. Você pode verificar <a href="https://github.com/bibliomundi/client-side-api/blob/master/errors.md" target="blank">aqui</a> uma lista dos possíveis erros que podem acontecer e suas respectivas etapas. Disponibilizamos também uma <a href="https://github.com/bibliomundi/client-side-api/tree/master/docs/" target="blank">documentação</a> gerada pelo <a target="blank" href="http://www.phpdoc.org/" target="blank">PHPDoc.</a>
+Errors may occur at all stages (Complete, Update, Validate, Checkout and Download) and will be of your responsibility to treat them and inform to the user if it is the case. Regardless of the requisition which is being made, we always return an Exception with information about the error. You may check the errors list and their respective stages <a href="https://github.com/bibliomundi/client-side-api/blob/master/errors.md" target="blank">here</a>. We have also made available the <a href="https://github.com/bibliomundi/client-side-api/tree/master/docs/" target="blank">documentation</a> generated by <a target="blank" href="http://www.phpdoc.org/" target="blank">PHPDoc.</a>
