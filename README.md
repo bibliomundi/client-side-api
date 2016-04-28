@@ -67,7 +67,7 @@ catch(\BBM\Server\Exception $e)
 }
 </pre>
 
-Cada tag &lt;Produto&gt; retornada pelo <a href="https://github.com/bibliomundi/client-side-api/blob/master/onix-essential.xml" target="blank">XML</a> é um ebook. Você irá percorrer todas elas e, seguindo normas do padrão Onix, inserindo em sua base de dados.
+Cada tag &lt;Product&gt; retornada pelo <a href="https://github.com/bibliomundi/client-side-api/blob/master/onix-essential.xml" target="blank">XML</a> é um ebook. Você irá percorrer todas elas e, seguindo normas do padrão Onix, inserindo em sua base de dados.
 
 Para maiores detalhes, veja um exemplo <a href="https://github.com/bibliomundi/client-side-api/tree/master/lib/BBM/examples/catalog.php">aqui<a/>.
 
@@ -100,7 +100,7 @@ catch(\BBM\Server\Exception $e)
 }
 </pre>
 
-Para cada tag &lt;produto&gt;, retornada pelo XML, existirá uma tag chamada &lt;NotificationType&gt; indicando a operação a ser realizada.
+Para cada tag &lt;Product&gt;, retornada pelo XML, existirá uma tag chamada &lt;NotificationType&gt; indicando a operação a ser realizada.
 
 Ex: 03 -> inserir. 04 -> Atualizar. 05 -> Deletar.
 
