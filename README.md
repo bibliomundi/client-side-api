@@ -51,7 +51,7 @@ $catalog->filters( array('image_height' => 500) );//Traz as capas dos ebooks com
 ...
 $catalog->filters( array('image_width' => 700) );//Traz as capas dos ebooks com largura de 700px
 ...
-$catalog->filters( array('image_width' => 1024, 'image_height' => 768) );//Traz as capas dos ebooks com largura de 1080px e largura de 768px
+$catalog->filters( array('image_width' => 1024, 'image_height' => 768) );//Traz as capas dos ebooks com largura de 1024px e altura de 768px
 </pre>
 
 Por fim, valide suas credenciais e importe os ebooks.
