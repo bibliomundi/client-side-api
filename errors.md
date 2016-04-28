@@ -1,4 +1,4 @@
-# Quando importando ou atualizando os ebooks
+# During "Import" or "Update"
 - Missing required property [scope] for root;
 - Missing required property [clientID] for root;
 - Invalid value for [root.clientID], maximum length is [42];
@@ -7,7 +7,7 @@
 - The DRM filter must be "yes" or "no" 
 - The image size must be an integer
  
-# Quando validando uma venda
+# During "Validate"
 - Your store is not active for sale, contact the support;
 - You cannot sell this publication (E-book ID <Bibliomundi E-book ID)>);
 - The price (<price>) of the e-book (<E-book ID>) must be with a maximum value at 100% of list price (<List Price>);
@@ -46,7 +46,7 @@ S","RU","RW","SA","SB","SC","SD","SE","SG","SH","SI","SJ","SK","SL","SM","SN","S
 - Invalid value for [root.items[i].bibliomundiEbookID], maximum is [4294967295];
 - String does not match pattern for [root.items[i].price].
 
-# Quando realizando o checkout
+# During "Checkout"
 
 - Missing required property [clientID] for root;
 - Missing required property [transactionKey] for root;
@@ -64,5 +64,5 @@ S","RU","RW","SA","SB","SC","SD","SE","SG","SH","SI","SJ","SK","SL","SM","SN","S
 - Missing required property [price] for [root.items[i]];
 - The sale (Transaction Key <Transaction Key>) already exists;
 
-# Quando relizando o Download
-- Você não tem permissão para fazer esse download.
+# During "Download"
+- You do not have permission to download.
