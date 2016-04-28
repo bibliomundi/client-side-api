@@ -105,7 +105,7 @@ Para cada tag &lt;Product&gt;, retornada pelo XML, existirá uma tag chamada &lt
 Ex: 03 -> inserir. 04 -> Atualizar. 05 -> Deletar.
 
 # Passo 4 - Realizando uma venda
-Uma vez que você disponibilizar os ebooks em sua loja, seus clientes estarão aptos a relizar compras. Toda vez que um cliente tentar comprar um produto nosso será necessário que você valide a transação conosco e em caso de aprovação prosseguir para o checkout. Repare que a sua validação e o seu checkout e a nossa validação e o nosso checkout sãos duas coisas distintas. Você deverá sempre validar e fazer o checkout conosco para que tenhamos ciência de que a venda foi efetuada, para então podermos liberar o download para o seu cliente. Tenha isso em mente.
+Uma vez que você disponibilizar os ebooks em sua loja, seus clientes estarão aptos a realizar compras. Toda vez que um cliente tentar comprar um produto nosso será necessário que você valide a transação conosco e em caso de aprovação prosseguir para o checkout. Repare que a sua validação e o seu checkout e a nossa validação e o nosso checkout sãos duas coisas distintas. Você deverá sempre validar e fazer o checkout conosco para que tenhamos ciência de que a venda foi efetuada, para então podermos liberar o download para o seu cliente. Tenha isso em mente.
 
 Fluxo:
 
