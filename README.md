@@ -10,7 +10,7 @@ OBS: This API requires knowledge of PHP coding. In case you work with other codi
 - Key and Secret. If you do not possess these credentials, please contact us at contato@bibliomundi.com.br.
 
 # Workflow
-1. Impor our complete calalogue. We will deliver the complete ONIX standard XML with all o four active ebooks.
+1. Import our complete calalogue. We will deliver the complete ONIX standard XML with all o four active ebooks.
 
 2. Insert the ebooks from our database following the ONIX standard.
 
