@@ -28,9 +28,9 @@ Simply download (or clone), add to your Project and then make a call to the file
 
 # Step 1 - Importing the ebooks to your store
 
-Instance the Catalogue class by sending your credentials as parametre.
+Instance the Catalogue class by sending your credentials as parameter.
 <pre>$catalog = new BBM\Catalog('YOUR_API_KEY', 'YOUR_API_SECRET');</pre>
-Define if the environmente you will import oure books will be Production or Sandbox.
+Define if the environmente you will import our ebooks will be Production or Sandbox.
 <pre>
 $catalog->environment = 'production';
 ou
