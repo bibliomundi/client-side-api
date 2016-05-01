@@ -1,5 +1,5 @@
 #About the API
-We are Bibliomundi, a ebook distributor and have made this plugin, Prestashop,with the purpose of integrating our ebooks with your store´s platform. In order to commercialize our ebooks at your store it does require knowledge of programing.
+We are Bibliomundi, a ebook distributor and have made this api with the purpose of integrating our ebooks with your store´s platform. In order to commercialize our ebooks at your store it does require knowledge of programing.
 OBS: This API requires knowledge of PHP coding. In case you work with other coding standards, we have published the complete webservice which may be accessed through this <a href="https://drive.google.com/file/d/0BzwFNhJ9FBNwS0JCSzA3cXFPYUk/view">link</a>.
 
 
