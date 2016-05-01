@@ -26,7 +26,9 @@ Simply download (or clone), add to your Project and then make a call to the file
 
 <pre>Ex: require &#39;lib/autoload.php&#39;</pre>
 
-# Step 1 - Instance the Catalogue class by sending your credentials as parametre.
+# Step 1 - Importing the ebooks to your store
+
+Instance the Catalogue class by sending your credentials as parametre.
 <pre>$catalog = new BBM\Catalog('YOUR_API_KEY', 'YOUR_API_SECRET');</pre>
 Define if the environmente you will import oure books will be Production or Sandbox.
 <pre>
