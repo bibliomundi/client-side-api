@@ -61,18 +61,18 @@ $purchase->setCustomer($customer);
 
 // ADD A NEW EBOOK, EVERY NEW EBOOK MUST BE ADDED AGAIN.
 // IF YOU WANT TO ADD A SINGLE BOOK, YOU CAN USE.
-// addItem(EBOOK_ID, PRICE);
-$purchase->addItem(3, 1);
+// addItem(EBOOK_ID, PRICE, CURRENCY);
+$purchase->addItem(3, 1, 'BRL');
 
 // OTHERWISE, IF YOU WANT A MULTIPLE SALE, YOU CAN SET LIKE THIS
 //$purchasedEbooks = [
-//    1 => ['id' => 48, 'price' => 50.00]
+//    1 => ['id' => 48, 'price' => 50.00, 'currency' => 'BRL']
 //];
 
 // FOREACH PURCHASED EBOOKS, ADD A NEW EBOOK.
 //foreach($purchasedEbooks as $ebook)
 //{
-//    $purchase->addItem($ebook['id'], $ebook['price']);
+//    $purchase->addItem($ebook['id'], $ebook['price'], $ebook['currency']);
 //}
 
 // CHECK IF YOU CAN COMPLETE THIS PURCHASE BEFORE YOU PROCEED TO CHECKOUT.
