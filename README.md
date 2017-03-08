@@ -145,7 +145,7 @@ Then insert the ebook by adding its ID and Price and then inform the currency.
 
 Check href="https://github.com/bibliomundi/client-side-api/blob/master/currency.md">here<a/> the full list.
 
-OBS: You may add as many ebooks as necessary by simply repeating the procedure with each ebook.
+OBS: You may add as many ebooks as necessary by simply repeating the procedure.
 
 Then validate the ebooks and follow to checkout.
 
