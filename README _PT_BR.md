@@ -139,10 +139,12 @@ $customer = [
 $purchase->setCustomer($customer);
 </pre>
 
-Em seguida adicione o ebook passando o ID e preço do mesmo.
-<pre>$purchase->addItem($ebookID, $ebookPrice);</pre>
+Em seguida adicione o ebook passando o ID, o preço do mesmo e a moeda na qual deseja realizar a venda.
+<pre>$purchase->addItem($ebookID, $ebookPrice, 'BRL');</pre>
 
-Obs. Você pode adicionar quantos ebooks forem necessários, bastando apenas repetir o procedimento para cada ebook.
+Consulte <a href="https://github.com/bibliomundi/client-side-api/blob/master/currency.md">aqui<a/> a lista completa de moedas que aceitamos no momento.
+
+Obs. Você pode adicionar quantos ebooks forem necessários, bastando apenas repetir o procedimento.
 
 Em seguida faça a validação do(s) ebook(s) e posteriormente o checkout.
 
