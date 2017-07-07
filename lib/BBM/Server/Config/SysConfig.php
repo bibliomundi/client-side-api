@@ -68,7 +68,7 @@ class SysConfig {
     /**
      * @var array
      */
-    public static $ACCEPTED_SCOPES = ['complete', 'updates'];
+    public static $ACCEPTED_SCOPES = ['complete', 'updates', 'deleted'];
 
     /**
      * @var array
