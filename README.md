@@ -90,7 +90,7 @@ $catalog->environment = 'sandbox';
 
 try
 {
-    $catalog->validate();//Valida suas credenciais
+    $catalog->validate();//Validate your credentials
     $xml = $catalog->get();//Returns an XML with the ebooks and their respective routines (insert, update or delete) in a string format and ONIX
 
 standard
@@ -140,10 +140,12 @@ $customer = [
 $purchase->setCustomer($customer);
 </pre>
 
-Then insert the ebook by adding its ID and Price.
-<pre>$purchase->addItem($ebookID, $ebookPrice);</pre>
+Then insert the ebook by adding its ID and Price and then inform the currency.
+<pre>$purchase->addItem($ebookID, $ebookPrice, 'USD');</pre>
 
-OBS: You may add as many ebooks as necessary by simply repeating the procedure with each ebook.
+Check href="https://github.com/bibliomundi/client-side-api/blob/master/currency.md">here<a/> the full list.
+
+OBS: You may add as many ebooks as necessary by simply repeating the procedure.
 
 Then validate the ebooks and follow to checkout.
 
