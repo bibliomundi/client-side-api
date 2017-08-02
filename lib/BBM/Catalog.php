@@ -162,6 +162,10 @@ class Catalog extends Connect
                     if(!is_int($value))
                         throw new Exception('The image size must be an integer');
                     break;
+                case 'imprint_id':
+                    if(!is_int($value))
+                        throw new Exception('The imprint id must be an integer');
+                    break;
             }
         }
 
