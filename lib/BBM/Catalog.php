@@ -159,12 +159,18 @@ class Catalog extends Connect
                 // TO KEEP THE SAME RATIO IN THE IMAGE.
                 case 'image_width':
                 case 'image_height':
+                case 'per_page':
+                case 'page':
                     if(!is_int($value))
                         throw new Exception('The image size must be an integer');
                     break;
                 case 'imprint_id':
                     if(!is_int($value))
                         throw new Exception('The imprint id must be an integer');
+                    break;
+                case 'catalog_format':
+                    if(!in_array($value, ['xml', 'json']))
+                        throw new Exception('The Catalog format must be "xml" or "json"');
                     break;
             }
         }

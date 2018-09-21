@@ -28,13 +28,13 @@
  */
 
 // NEW INSTANCE OF THE PURCHASE. YOU CAN SEND MORE THEN ONE ITEM ON THE PURCHASE.
-$purchase = new BBM\Purchase('YOUR_API_KEY', 'YOUR_API_SECRET');
+$purchase = new BBM\Purchase('7a054eaf414b232de9df7f1a15b03c8890e89290', 'c63f5cef76feef95cddf83298647479926c38a01');
 
 /*
  * Server environment that you want to use: sandbox or production.
  * Default: 'sandbox'
  */
-$purchase->environment = 'sandbox';
+$purchase->environment = 'production';
 
 /*
  * Verbose (true|false), enable this option and a full output will be shown.
@@ -48,7 +48,7 @@ $purchase->environment = 'sandbox';
 $customer = [
     'customerIdentificationNumber' => 1, // INT, YOUR STORE CUSTOMER ID
     'customerFullname' => 'CUSTOMER NAME', // STRING, CUSTOMER FULL NAME
-    'customerEmail' => 'customer@email.com', // STRING, CUSTOMER EMAIL
+    'customerEmail' => 'customer@patagonia.com', // STRING, CUSTOMER EMAIL
     'customerGender' => 'm', // ENUM, CUSTOMER GENDER, USE m OR f (LOWERCASE!! male or female)
     'customerBirthday' => '1991/11/03', // STRING, CUSTOMER BIRTH DATE, USE Y/m/d (XXXX/XX/XX)
     'customerCountry' => 'BR', // STRING, 2 CHAR STRING THAT INDICATE THE CUSTOMER COUNTRY (BR, US, ES, etc)
@@ -62,7 +62,7 @@ $purchase->setCustomer($customer);
 // ADD A NEW EBOOK, EVERY NEW EBOOK MUST BE ADDED AGAIN.
 // IF YOU WANT TO ADD A SINGLE BOOK, YOU CAN USE.
 // addItem(EBOOK_ID, PRICE, CURRENCY);
-$purchase->addItem(3, 1, 'BRL');
+$purchase->addItem(11930, 1, 'BRL');
 
 // OTHERWISE, IF YOU WANT A MULTIPLE SALE, YOU CAN SET LIKE THIS
 //$purchasedEbooks = [
@@ -101,7 +101,7 @@ try
     // WHATEVER YOU SEND TO US, BUT, STAY ON THE PATTERNS AND FOLLOW THE GUIDE
     // AND WE WILL NOT HAVE FURTHER PROBLEMS.
 
-    echo $purchase->checkout('TRANSACTION_KEY', time());
+    echo $purchase->checkout('EL_TIGRE_TESTE' . time(), time());
 }
 catch(\BBM\Server\Exception $e)
 {
