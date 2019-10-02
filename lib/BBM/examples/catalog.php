@@ -28,7 +28,7 @@
  */
 
 // NEW INSTANCE OF THE CATALOG. EVERY NEW LIST MUST BE A NEW INSTANCE.
-$catalog = new BBM\Catalog('YOUR_APY_KEY', 'YOUR_API_SECRET', 'SCOPE');
+$catalog = new BBM\Catalog('7a054eaf414b232de9df7f1a15b03c8890e89290', 'c63f5cef76feef95cddf83298647479926c38a01', 'complete');
 
 /////////////////////////////////////////////////
 //                  NOTICE                     //
@@ -50,7 +50,7 @@ $catalog->environment = 'sandbox';
  */
 
 // UNCOMMENT THIS CODE TO ACTIVATE THE VERBOSE MODE
-// $catalog->verbose(true);
+$catalog->verbose(true);
 
 /*
  * FILTERS
@@ -82,7 +82,7 @@ $catalog->environment = 'sandbox';
  *      $catalog->filters( array('image_height' => 1100, 'drm' => 'no') ); // THIS CODE WILL PRODUCE: ONLY UNPROTECTED EBOOKS AND WITH 1100px OF HEIGHT ON THE COVER
  */
 // UNCOMMENT TO USE (USE IT CAREFULLY!):
-// $catalog->filters(['image_height' => 1100]);
+// $catalog->filters(['catalog_format' => 'json']);
 
 try
 {
@@ -98,5 +98,5 @@ catch(\BBM\Server\Exception $e)
 
 
 
-header('Content-Type: application/xml; charset=utf-8');
+// header('Content-Type: application/json; charset=utf-8');
 echo $xml;
