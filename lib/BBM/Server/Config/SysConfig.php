@@ -73,5 +73,5 @@ class SysConfig {
     /**
      * @var array
      */
-    public static $ACCEPTED_FILTERS = ['drm', 'image_width', 'image_height', 'imprint_id', 'catalog_format', 'per_page', 'page'];
+    public static $ACCEPTED_FILTERS = ['drm', 'image_width', 'image_height', 'imprint_id', 'catalog_format', 'per_page', 'page', 'catalog_from', 'catalog_to'];
 }

@@ -28,7 +28,7 @@
  */
 
 // NEW INSTANCE OF THE CATALOG. EVERY NEW LIST MUST BE A NEW INSTANCE.
-$catalog = new BBM\Catalog('7a054eaf414b232de9df7f1a15b03c8890e89290', 'c63f5cef76feef95cddf83298647479926c38a01', 'complete');
+$catalog = new BBM\Catalog('93c9e430729c27158b10e0279587a771826de371', '1a8ae8a7715c9d12f466fb9ae23fc34ca9556849', 'updates');
 
 /////////////////////////////////////////////////
 //                  NOTICE                     //
@@ -41,7 +41,7 @@ $catalog = new BBM\Catalog('7a054eaf414b232de9df7f1a15b03c8890e89290', 'c63f5cef
  * Server environment that you want to use: sandbox or production.
  * Default: 'sandbox'
  */
-$catalog->environment = 'sandbox';
+$catalog->environment = 'development';
 
 /*
  * VERBOSE
@@ -82,7 +82,7 @@ $catalog->verbose(true);
  *      $catalog->filters( array('image_height' => 1100, 'drm' => 'no') ); // THIS CODE WILL PRODUCE: ONLY UNPROTECTED EBOOKS AND WITH 1100px OF HEIGHT ON THE COVER
  */
 // UNCOMMENT TO USE (USE IT CAREFULLY!):
-// $catalog->filters(['catalog_format' => 'json']);
+$catalog->filters(['catalog_from' => '2019-10-24', 'catalog_to' => '2019-10-30']);
 
 try
 {
