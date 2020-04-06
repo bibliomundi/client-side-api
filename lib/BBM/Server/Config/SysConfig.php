@@ -43,7 +43,7 @@ class SysConfig {
     /**
      * @var string
      */
-    public static $BASE_CONNECT_URI = 'http://connect.bibliomundi.com/';
+    public static $BASE_CONNECT_URI = ['development' => 'oauth.bibliomundi.test/', 'sandbox' => 'http://connect.bmhomolog.servicebm.com.br/', 'production' => 'http://connect.bibliomundi.com/'];
 
     /**
      * @var string
@@ -73,5 +73,5 @@ class SysConfig {
     /**
      * @var array
      */
-    public static $ACCEPTED_FILTERS = ['drm', 'image_width', 'image_height', 'imprint_id', 'catalog_format', 'per_page', 'page'];
+    public static $ACCEPTED_FILTERS = ['drm', 'image_width', 'image_height', 'imprint_id', 'catalog_format', 'per_page', 'page', 'catalog_from', 'catalog_to', 'cache'];
 }

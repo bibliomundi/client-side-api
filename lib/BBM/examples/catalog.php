@@ -28,7 +28,7 @@
  */
 
 // NEW INSTANCE OF THE CATALOG. EVERY NEW LIST MUST BE A NEW INSTANCE.
-$catalog = new BBM\Catalog('YOUR_APY_KEY', 'YOUR_API_SECRET', 'SCOPE');
+$catalog = new BBM\Catalog('93c9e430729c27158b10e0279587a771826de371', '1a8ae8a7715c9d12f466fb9ae23fc34ca9556849', 'updates');
 
 /////////////////////////////////////////////////
 //                  NOTICE                     //
@@ -41,7 +41,7 @@ $catalog = new BBM\Catalog('YOUR_APY_KEY', 'YOUR_API_SECRET', 'SCOPE');
  * Server environment that you want to use: sandbox or production.
  * Default: 'sandbox'
  */
-$catalog->environment = 'sandbox';
+$catalog->environment = 'development';
 
 /*
  * VERBOSE
@@ -50,7 +50,7 @@ $catalog->environment = 'sandbox';
  */
 
 // UNCOMMENT THIS CODE TO ACTIVATE THE VERBOSE MODE
-// $catalog->verbose(true);
+$catalog->verbose(true);
 
 /*
  * FILTERS
@@ -82,7 +82,7 @@ $catalog->environment = 'sandbox';
  *      $catalog->filters( array('image_height' => 1100, 'drm' => 'no') ); // THIS CODE WILL PRODUCE: ONLY UNPROTECTED EBOOKS AND WITH 1100px OF HEIGHT ON THE COVER
  */
 // UNCOMMENT TO USE (USE IT CAREFULLY!):
-// $catalog->filters(['image_height' => 1100]);
+$catalog->filters(['catalog_from' => '2019-10-24', 'catalog_to' => '2019-10-30']);
 
 try
 {
@@ -98,5 +98,5 @@ catch(\BBM\Server\Exception $e)
 
 
 
-header('Content-Type: application/xml; charset=utf-8');
+// header('Content-Type: application/json; charset=utf-8');
 echo $xml;

@@ -167,7 +167,7 @@ class Request
      */
     public function setPost($postFields)
     {
-        $post = '';
+        $post = [];
         $this->_post = 1;
         $this->_postFields = $postFields;
 

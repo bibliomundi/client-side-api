@@ -89,7 +89,7 @@ class Catalog extends Connect
         {
             // IF NO EXCEPTION IS THROWN BEFORE, THE REQUEST CAN BE SENT, SO
             // HERE WE GET THE ACCESS TOKEN FOR THIS DOWNLOAD REQUEST.
-            $request = new Server\Request(Server\Config\SysConfig::$BASE_CONNECT_URI . 'token.php', $this->verbose);
+            $request = new Server\Request(Server\Config\SysConfig::$BASE_CONNECT_URI[$this->environment] . 'token.php', $this->verbose);
             $request->authenticate(true, $this->clientId, $this->clientSecret);
             $request->create();
             $request->setPost(['grant_type' => Server\Config\SysConfig::$GRANT_TYPE, 'environment' => $this->environment]);
@@ -191,7 +191,7 @@ class Catalog extends Connect
     public function get()
     {
         // GENERATE THE CURL HANDLER
-        $request = new Server\Request(Server\Config\SysConfig::$BASE_CONNECT_URI . Server\Config\SysConfig::$BASE_DOWNLOAD . 'list.php', $this->verbose);
+        $request = new Server\Request(Server\Config\SysConfig::$BASE_CONNECT_URI[$this->environment] . Server\Config\SysConfig::$BASE_DOWNLOAD . 'list.php', $this->verbose);
         $request->authenticate(false);
         $request->create();
 
