@@ -74,16 +74,21 @@ class Purchase extends Connect
         if(!isset($this->data['access_token']))
         {
             // GET THE ACCESS TOKEN ON THE OAUTH SERVER
-            $request = new Server\Request(Server\Config\SysConfig::$BASE_CONNECT_URI . 'token.php', $this->verbose);
+            $request = new Server\Request(Server\Config\SysConfig::$BASE_CONNECT_URI[$this->environment] . 'token.php', $this->verbose);
             $request->authenticate(true, $this->clientId, $this->clientSecret);
             $request->create();
             $request->setPost(['grant_type' => Server\Config\SysConfig::$GRANT_TYPE, 'environment' => $this->environment]);
             $response = json_decode($request->execute());
 
-            // SET THE ACCESS TOKEN TO THE NEXT REQUEST DATA.
-            $this->data['access_token'] = $response->access_token;
-            $this->data['clientID'] = $this->clientId;
-            $this->data['environment'] = $this->environment;
+            try{
+
+                // SET THE ACCESS TOKEN TO THE NEXT REQUEST DATA.
+                $this->data['access_token'] = $response->access_token;
+                $this->data['clientID'] = $this->clientId;
+                $this->data['environment'] = $this->environment;
+            }catch(\Exception $e){
+                die($e->getMessage());
+            }
         }
     }
 
@@ -108,7 +113,7 @@ class Purchase extends Connect
             $this->autenticate();
 
             // SEND THE REQUEST TO VALIDATE
-            $request = new Server\Request(Server\Config\SysConfig::$BASE_CONNECT_URI . Server\Config\SysConfig::$BASE_PURCHASE . 'validate.php', $this->verbose);
+            $request = new Server\Request(Server\Config\SysConfig::$BASE_CONNECT_URI[$this->environment] . Server\Config\SysConfig::$BASE_PURCHASE . 'validate.php', $this->verbose);
             $request->authenticate(false);
             $request->create();
             $request->setPost($this->data);
@@ -179,6 +184,15 @@ class Purchase extends Connect
     }
 
     /**
+     * Remove all items from sale
+     * @return void 
+     */
+    public function clearItems()
+    {
+        $this->items = [];
+    }
+
+    /**
      * Execute the checkout of the purchase, indicate to us that you have already recived the "okay"
      * from the payment gateway and already had inserted this same transaction_key to your database.
      * @param $transactionKey
@@ -196,10 +210,14 @@ class Purchase extends Connect
         $this->data['items'] = $this->items;
 
         // LOGIN ON OAUTH SERVER
-        $this->autenticate();
+        try{
+            $this->autenticate();
+        }catch(\Exception $e){
+            die($e->getMessage());
+        }
 
         // SEND THE REQUEST TO THE CHECKOUT
-        $request = new Server\Request(Server\Config\SysConfig::$BASE_CONNECT_URI . Server\Config\SysConfig::$BASE_PURCHASE . 'purchase.php', $this->verbose);
+        $request = new Server\Request(Server\Config\SysConfig::$BASE_CONNECT_URI[$this->environment] . Server\Config\SysConfig::$BASE_PURCHASE . 'purchase.php', $this->verbose);
         $request->authenticate(false);
         $request->create();
         $request->setPost($this->data);
