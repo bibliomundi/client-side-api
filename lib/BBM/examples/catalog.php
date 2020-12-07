@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Created by Bibliomundi.
  * User: Victor Martins
@@ -28,7 +29,7 @@
  */
 
 // NEW INSTANCE OF THE CATALOG. EVERY NEW LIST MUST BE A NEW INSTANCE.
-$catalog = new BBM\Catalog('93c9e430729c27158b10e0279587a771826de371', '1a8ae8a7715c9d12f466fb9ae23fc34ca9556849', 'updates');
+$catalog = new BBM\Catalog('7a054eaf414b232de9df7f1a15b03c8890e89290', 'c63f5cef76feef95cddf83298647479926c38a01', 'updates');
 
 /////////////////////////////////////////////////
 //                  NOTICE                     //
@@ -84,19 +85,13 @@ $catalog->verbose(true);
 // UNCOMMENT TO USE (USE IT CAREFULLY!):
 $catalog->filters(['catalog_from' => '2019-10-24', 'catalog_to' => '2019-10-30']);
 
-try
-{
+try {
     $catalog->validate();
     $xml = $catalog->get(); // GET THE ONIX XML STRING, YOU CAN ECHO OR EXIT THIS STRING
-                            // BUT IS RECOMMENDED THAT YOU USE SOME XML PARSER TO INSERT THIS
-                            // INTO YOUR DATABASE.
-}
-catch(\BBM\Server\Exception $e)
-{
+    // BUT IS RECOMMENDED THAT YOU USE SOME XML PARSER TO INSERT THIS
+    // INTO YOUR DATABASE.
+} catch (\BBM\Server\Exception $e) {
     throw $e;
 }
-
-
-
 // header('Content-Type: application/json; charset=utf-8');
 echo $xml;

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Created by Bibliomundi.
  * User: Victor Martins
@@ -28,13 +29,13 @@
  */
 
 // NEW INSTANCE OF THE PURCHASE. YOU CAN SEND MORE THEN ONE ITEM ON THE PURCHASE.
-$purchase = new BBM\Purchase('7a054eaf414b232de9df7f1a15b03c8890e89290', 'c63f5cef76feef95cddf83298647479926c38a01');
+$purchase = new BBM\Purchase('cc9bcb2c607141cf45de6843e1c84a8555098b7b', '472fa65bac8cf7984b9a5d299c9a29b04e8f5ae4');
 
 /*
  * Server environment that you want to use: sandbox or production.
  * Default: 'sandbox'
  */
-$purchase->environment = 'production';
+$purchase->environment = 'development';
 
 /*
  * Verbose (true|false), enable this option and a full output will be shown.
@@ -47,8 +48,8 @@ $purchase->verbose(true);
 // CUSTOMER DATA ARRAY
 $customer = [
     'customerIdentificationNumber' => 1, // INT, YOUR STORE CUSTOMER ID
-    'customerFullname' => 'CUSTOMER NAME', // STRING, CUSTOMER FULL NAME
-    'customerEmail' => 'contato@sergiosobata.com', // STRING, CUSTOMER EMAIL
+    'customerFullname' => 'Customer Test', // STRING, CUSTOMER FULL NAME
+    'customerEmail' => 'dev@bibliomundi.com.br', // STRING, CUSTOMER EMAIL
     // 'customerEmail' => 'raphael.secchin@bibliomundi.com.br', // STRING, CUSTOMER EMAIL
     'customerGender' => 'm', // ENUM, CUSTOMER GENDER, USE m OR f (LOWERCASE!! male or female)
     'customerBirthday' => '1991/11/03', // STRING, CUSTOMER BIRTH DATE, USE Y/m/d (XXXX/XX/XX)
@@ -63,7 +64,7 @@ $purchase->setCustomer($customer);
 // ADD A NEW EBOOK, EVERY NEW EBOOK MUST BE ADDED AGAIN.
 // IF YOU WANT TO ADD A SINGLE BOOK, YOU CAN USE.
 // addItem(EBOOK_ID, PRICE, CURRENCY);
-$purchase->addItem(11129, 22.40, 'BRL');
+$purchase->addItem(11260, 0.0, 'BRL');
 // $purchase->addItem(11212, 1, 'BRL');
 // $purchase->addItem(895, 1, 'BRL');
 // $purchase->addItem(294, 1, 'BRL');
@@ -80,8 +81,7 @@ $purchase->addItem(11129, 22.40, 'BRL');
 //}
 
 // CHECK IF YOU CAN COMPLETE THIS PURCHASE BEFORE YOU PROCEED TO CHECKOUT.
-try
-{
+try {
     $purchase->validate();
 
     // IF THE PURCHASE IS VALID, YOU CAN PROCEED TO YOUR CHECKOUT. DO NOT EXECUTE
@@ -106,8 +106,6 @@ try
     // AND WE WILL NOT HAVE FURTHER PROBLEMS.
 
     echo $purchase->checkout('ARTES_APPSTORE' . time(), time());
-}
-catch(\BBM\Server\Exception $e)
-{
+} catch (\BBM\Server\Exception $e) {
     echo $e;
 }

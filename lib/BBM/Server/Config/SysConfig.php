@@ -43,7 +43,7 @@ class SysConfig {
     /**
      * @var string
      */
-    public static $BASE_CONNECT_URI = ['development' => 'oauth.bibliomundi.test/', 'sandbox' => 'http://connect.bmhomolog.servicebm.com.br/', 'production' => 'http://connect.bibliomundi.com/'];
+    public static $BASE_CONNECT_URI = ['development' => 'http://bm.oauth/', 'sandbox' => 'http://connect.bmhomolog.servicebm.com.br/', 'production' => 'http://connect.bibliomundi.com/'];
 
     /**
      * @var string
