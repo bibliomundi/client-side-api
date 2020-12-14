@@ -191,32 +191,30 @@ class Request
     public function create()
     {
         $this->curlHandler = curl_init();
-
         curl_setopt($this->curlHandler, CURLOPT_URL, $this->_url);
         curl_setopt($this->curlHandler, CURLOPT_HTTPHEADER, array('Content-Type: application/x-www-form-urlencoded'));
         curl_setopt($this->curlHandler, CURLOPT_TIMEOUT, $this->_timeout);
         curl_setopt($this->curlHandler, CURLOPT_MAXREDIRS, $this->_maxRedirects);
         curl_setopt($this->curlHandler, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($this->curlHandler, CURLOPT_FOLLOWLOCATION, $this->_followlocation);
-
         if ($this->authentication) {
             curl_setopt($this->curlHandler, CURLOPT_USERPWD, $this->auth_name . ':' . $this->auth_pass);
         }
-
         if ($this->_includeHeader) {
             curl_setopt($this->curlHandler, CURLOPT_HEADER, true);
         }
-
         if ($this->_noBody) {
             curl_setopt($this->curlHandler, CURLOPT_NOBODY, true);
         }
-
         if ($this->_binaryTransfer) {
             curl_setopt($this->curlHandler, CURLOPT_BINARYTRANSFER, true);
         }
-
-        curl_setopt($this->curlHandler, CURLOPT_USERAGENT, $_SERVER['HTTP_USER_AGENT']);
-        curl_setopt($this->curlHandler, CURLOPT_REFERER, $_SERVER['SERVER_NAME']);
+        if (isset($_SERVER['HTTP_USER_AGENT'])) {
+            curl_setopt($this->curlHandler, CURLOPT_USERAGENT, $_SERVER['HTTP_USER_AGENT']);
+        }
+        if (isset($_SERVER['SERVER_NAME'])) {
+            curl_setopt($this->curlHandler, CURLOPT_REFERER, $_SERVER['SERVER_NAME']);
+        }
     }
 
     /**
