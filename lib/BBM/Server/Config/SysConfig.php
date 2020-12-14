@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Created by Bibliomundi.
  * User: Victor Martins
@@ -38,12 +39,18 @@ namespace BBM\Server\Config;
  * Class SysConfig
  * @package BBM\Server\Config
  */
-class SysConfig {
+class SysConfig
+{
 
     /**
      * @var string
      */
     public static $BASE_CONNECT_URI = ['development' => 'http://bm.oauth/', 'sandbox' => 'http://connect.bmhomolog.servicebm.com.br/', 'production' => 'http://connect.bibliomundi.com/'];
+
+    /**
+     * @var string
+     */
+    public static $BASE_SALE = 'sale/';
 
     /**
      * @var string

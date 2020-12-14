@@ -32,169 +32,86 @@ namespace BBM;
 
 use BBM\Server\Connect;
 use BBM\Server\Exception;
-use BBM\Server\Request;
 
 /**
- * Class Purchase
- * Used to reverse purchases in the bibliomundi, this class support
- * multi purchases and single purchase.
+ * Class Download
+ * Used to execute the download of the desired ebook from the Bibliomundi Server.
+ * Uses cURL as method to send and recive the information, you can use the example to
+ * learn how to use.
+ *
+ * @see https://github.com/bibliomundi/client-side-api/blob/master/lib/BBM/examples/download.php
  * @package BBM
  */
 class ReversePurchase extends Connect
 {
+    /**
+     * Data that the API send to the Bibliomundi Server.
+     * @var Mixed
+     */
+    private $data;
 
     /**
-     * Only a handler to be used in the post.
-     * @property array
+     * Validate the data and get the OAuth2 access_token for this request.
+     * @param array $data
+     *
+     * @return bool
+     * @throws Exception
      */
-    private $data = array();
-
-    private function autenticate()
+    public function validate(array $data)
     {
-        // VERIFY IF THE ACCESS TOKEN HAS BEEN ALREADY SET
-        if (!isset($this->data['access_token'])) {
-            // GET THE ACCESS TOKEN ON THE OAUTH SERVER
-            $request = new Server\Request(Server\Config\SysConfig::$BASE_CONNECT_URI[$this->environment] . 'token.php', $this->verbose);
+        $this->data = $data;
+
+        try {
+            $this->validateData();
+            $request = new Server\Request(Server\Config\SysConfig::$BASE_CONNECT_URI . 'token.php', $this->verbose);
             $request->authenticate(true, $this->clientId, $this->clientSecret);
             $request->create();
             $request->setPost(['grant_type' => Server\Config\SysConfig::$GRANT_TYPE, 'environment' => $this->environment]);
             $response = json_decode($request->execute());
 
-            try {
-
-                // SET THE ACCESS TOKEN TO THE NEXT REQUEST DATA.
-                $this->data['access_token'] = $response->access_token;
-                $this->data['clientID'] = $this->clientId;
-                $this->data['environment'] = $this->environment;
-            } catch (\Exception $e) {
-                die($e->getMessage());
-            }
-        }
-    }
-
-    /**
-     * Validate the data and get the OAuth2 access_token for this request.
-     *
-     * @param $bypass boolean Set if you want to bypass
-     * @return bool
-     * @throws Exception
-     */
-    public function validate()
-    {
-        $this->data = $this->customer;
-        $this->data['items'] = $this->items;
-
-        try {
-            // VALIDATE THE DATA BEFORE SEND IT, ONLY TO AVOID UNNECESSARY REQUESTS.
-            $this->validateData();
-
-            // LOGIN ON THE OAUTH SERVER
-            $this->autenticate();
-
-            // SEND THE REQUEST TO VALIDATE
-            $request = new Server\Request(Server\Config\SysConfig::$BASE_CONNECT_URI[$this->environment] . Server\Config\SysConfig::$BASE_PURCHASE . 'validate.php', $this->verbose);
-            $request->authenticate(false);
-            $request->create();
-            $request->setPost($this->data);
-
-            // SET THE DATA TO VALIDATE.
-            $response = $request->execute();
-
-            // VERIFY THE RESPONSE CODE
-            if (!in_array($request->getHttpStatus(), [200, 201]))
-                throw new Exception($response, $request->getHttpStatus());
-
-            return $response;
+            // SET THE ACCESS TOKEN TO THE NEXT REQUEST DATA.
+            $this->data['access_token'] = $response->access_token;
+            $this->data['environment'] = $this->environment;
         } catch (Exception $e) {
-            throw new Exception($e->getMessage(), $e->getCode(), $e);
+            throw $e;
         }
-
-        return false;
-    }
-
-    /**
-     * Validate some data, it`s like a front-end validation, all this will be re-validated by the
-     * backend environment.
-     * @return bool
-     * @throws Exception
-     */
-    private function validateData()
-    {
-        if (!isset($this->data['customerIdentificationNumber'],
-        $this->data['customerFullname'],
-        $this->data['customerEmail'],
-        $this->data['customerGender'],
-        $this->data['customerBirthday'],
-        $this->data['customerZipcode'],
-        $this->data['customerState']))
-            throw new Exception('Invalid Request, check the mandatory fields', 400);
-
-        if (empty($this->data['items']))
-            throw new Exception('No ebooks added', 400);
 
         return true;
     }
 
     /**
-     * Set the active customer that is buying the ebooks.
-     * @param array $data
-     */
-    public function setCustomer(array $data)
-    {
-        $this->customer = $data;
-    }
-
-    /**
-     * Add new itens to the bundle that will be saved.
-     * @param $bibliomundiEbookID
-     * @param $price
-     * @param $currency array['BRL', 'USD', 'EUR', 'GBP']
-     *
+     * Validate everything inside the $data Array to check if all the information
+     * that we need will be sent.
      * @throws Exception
      */
-    public function addItem($bibliomundiEbookID, $price, $currency)
+    private function validateData()
     {
-        $this->items[] = ['bibliomundiEbookID' => $bibliomundiEbookID, 'price' => $price, 'currency' => $currency];
+        // REQUIRED DATA
+        if (!isset($this->data['ebook_id'], $this->data['transaction_key']))
+            throw new Exception('Data array invalid', 500);
+
+        // SET THE CLIENT_ID TO THE REQUEST
+        $this->data['client_id'] = $this->clientId;
     }
 
     /**
-     * Remove all items from sale
-     * @return void 
-     */
-    public function clearItems()
-    {
-        $this->items = [];
-    }
-
-    /**
-     * Execute the reverse of the purchase, indicate to us that you have already recived the "okay"
-     * from the payment gateway and already had inserted this same transaction_key to your database.
-     * @param $transactionKey
-     * @param $transactionTime
-     *
-     * @return mixed
+     * Execute the request to get the ebook binary string, in case of success, the file
+     * will be outputed and forced to download.
      * @throws Exception
      */
-    public function reverse($transactionKey, $transactionTime)
+    public function reverse()
     {
-        // SET THE DATA TO BE SENT
-        $this->data = $this->customer;
-        $this->data['transactionKey'] = $transactionKey;
-        $this->data['saleDate'] = date('Y-m-d H:i:s', $transactionTime);
-        $this->data['items'] = $this->items;
-
-        // LOGIN ON OAUTH SERVER
-        try {
-            $this->autenticate();
-        } catch (\Exception $e) {
-            die($e->getMessage());
-        }
-
-        // SEND THE REQUEST TO THE CHECKOUT
-        $request = new Server\Request(Server\Config\SysConfig::$BASE_CONNECT_URI[$this->environment] . Server\Config\SysConfig::$BASE_PURCHASE . 'purchase.php', $this->verbose);
+        // GENERATE THE CURL HANDLER
+        $request = new Server\Request(Server\Config\SysConfig::$BASE_CONNECT_URI . Server\Config\SysConfig::$BASE_SALE . 'reverse.php', $this->verbose);
         $request->authenticate(false);
         $request->create();
         $request->setPost($this->data);
-        return $request->execute();
+
+        try {
+            // SEND IT, IF OKAY, THE __TOSTRING WILL BE THE EBOOK BINARY STRING
+            $request->execute();
+        } catch (Exception $e) {
+            throw new Exception($e->getMessage(), $e->getCode());
+        }
     }
 }

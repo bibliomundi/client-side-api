@@ -11,3 +11,4 @@ const TRANSACTION_KEY_PREFIX = 'MY_STORE_TESTS_'; //used on purchase
 //include 'lib/BBM/examples/Download.php';
 // include 'lib/BBM/examples/Purchase.php';
 //include 'lib/BBM/examples/Catalog.php';
+//include 'lib/BBM/examples/ReversePurchase.php';
