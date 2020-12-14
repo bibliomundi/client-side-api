@@ -42,7 +42,7 @@ use BBM\Server\Exception;
  * @see https://github.com/bibliomundi/client-side-api/blob/master/lib/BBM/examples/download.php
  * @package BBM
  */
-class ReversePurchase extends Connect
+class RefundPurchase extends Connect
 {
     /**
      * Data that the API send to the Bibliomundi Server.
@@ -88,7 +88,7 @@ class ReversePurchase extends Connect
     {
         // REQUIRED DATA
         if (!isset($this->data['ebook_id'], $this->data['transaction_key']))
-            throw new Exception('Data array invalid', 500);
+            throw new Exception('ebooks_id ou transaction_key são inválidos', 422);
 
         // SET THE CLIENT_ID TO THE REQUEST
         $this->data['client_id'] = $this->clientId;
@@ -99,10 +99,10 @@ class ReversePurchase extends Connect
      * will be outputed and forced to download.
      * @throws Exception
      */
-    public function reverse()
+    public function requestRefund()
     {
         // GENERATE THE CURL HANDLER
-        $request = new Server\Request(Server\Config\SysConfig::$BASE_CONNECT_URI . Server\Config\SysConfig::$BASE_SALE . 'reverse.php', $this->verbose);
+        $request = new Server\Request(Server\Config\SysConfig::$BASE_CONNECT_URI . Server\Config\SysConfig::$BASE_SALE . 'refund.php', $this->verbose);
         $request->authenticate(false);
         $request->create();
         $request->setPost($this->data);
