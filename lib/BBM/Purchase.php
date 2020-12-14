@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Created by Bibliomundi.
  * User: Victor Martins
@@ -71,8 +72,7 @@ class Purchase extends Connect
     private function autenticate()
     {
         // VERIFY IF THE ACCESS TOKEN HAS BEEN ALREADY SET
-        if(!isset($this->data['access_token']))
-        {
+        if (!isset($this->data['access_token'])) {
             // GET THE ACCESS TOKEN ON THE OAUTH SERVER
             $request = new Server\Request(Server\Config\SysConfig::$BASE_CONNECT_URI[$this->environment] . 'token.php', $this->verbose);
             $request->authenticate(true, $this->clientId, $this->clientSecret);
@@ -80,13 +80,13 @@ class Purchase extends Connect
             $request->setPost(['grant_type' => Server\Config\SysConfig::$GRANT_TYPE, 'environment' => $this->environment]);
             $response = json_decode($request->execute());
 
-            try{
+            try {
 
                 // SET THE ACCESS TOKEN TO THE NEXT REQUEST DATA.
                 $this->data['access_token'] = $response->access_token;
                 $this->data['clientID'] = $this->clientId;
                 $this->data['environment'] = $this->environment;
-            }catch(\Exception $e){
+            } catch (\Exception $e) {
                 die($e->getMessage());
             }
         }
@@ -104,8 +104,7 @@ class Purchase extends Connect
         $this->data = $this->customer;
         $this->data['items'] = $this->items;
 
-        try
-        {
+        try {
             // VALIDATE THE DATA BEFORE SEND IT, ONLY TO AVOID UNNECESSARY REQUESTS.
             $this->validateData();
 
@@ -122,14 +121,11 @@ class Purchase extends Connect
             $response = $request->execute();
 
             // VERIFY THE RESPONSE CODE
-            if(!in_array($request->getHttpStatus(), [200, 201]))
+            if (!in_array($request->getHttpStatus(), [200, 201]))
                 throw new Exception($response, $request->getHttpStatus());
 
             return $response;
-
-        }
-        catch(Exception $e)
-        {
+        } catch (Exception $e) {
             throw new Exception($e->getMessage(), $e->getCode(), $e);
         }
 
@@ -144,18 +140,16 @@ class Purchase extends Connect
      */
     private function validateData()
     {
-        if(!isset(
-            $this->data['customerIdentificationNumber'],
-            $this->data['customerFullname'],
-            $this->data['customerEmail'],
-            $this->data['customerGender'],
-            $this->data['customerBirthday'],
-            $this->data['customerZipcode'],
-            $this->data['customerState']
-        ))
+        if (!isset($this->data['customerIdentificationNumber'],
+        $this->data['customerFullname'],
+        $this->data['customerEmail'],
+        $this->data['customerGender'],
+        $this->data['customerBirthday'],
+        $this->data['customerZipcode'],
+        $this->data['customerState']))
             throw new Exception('Invalid Request, check the mandatory fields', 400);
 
-        if(empty($this->data['items']))
+        if (empty($this->data['items']))
             throw new Exception('No ebooks added', 400);
 
         return true;
@@ -165,7 +159,7 @@ class Purchase extends Connect
      * Set the active customer that is buying the ebooks.
      * @param array $data
      */
-    public function setCustomer(Array $data)
+    public function setCustomer(array $data)
     {
         $this->customer = $data;
     }
@@ -201,21 +195,22 @@ class Purchase extends Connect
      * @return mixed
      * @throws Exception
      */
-    public function checkout($transactionKey, $transactionTime)
+    public function checkout($transactionKey, $transactionTime, $mode = null)
     {
         // SET THE DATA TO BE SENT
         $this->data = $this->customer;
         $this->data['transactionKey'] = $transactionKey;
         $this->data['saleDate'] = date('Y-m-d H:i:s', $transactionTime);
         $this->data['items'] = $this->items;
-
+        if (!is_null($mode)) {
+            $this->data['mode'] = $mode;
+        }
         // LOGIN ON OAUTH SERVER
-        try{
+        try {
             $this->autenticate();
-        }catch(\Exception $e){
+        } catch (\Exception $e) {
             die($e->getMessage());
         }
-
         // SEND THE REQUEST TO THE CHECKOUT
         $request = new Server\Request(Server\Config\SysConfig::$BASE_CONNECT_URI[$this->environment] . Server\Config\SysConfig::$BASE_PURCHASE . 'purchase.php', $this->verbose);
         $request->authenticate(false);
@@ -223,5 +218,4 @@ class Purchase extends Connect
         $request->setPost($this->data);
         return $request->execute();
     }
-
 }
