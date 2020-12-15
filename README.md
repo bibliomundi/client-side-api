@@ -1,11 +1,11 @@
 #About the API
-We are Bibliomundi, a ebook distributor and have made this api with the purpose of integrating our ebooks with your store´s platform. In order to commercialize our ebooks at your store it does require knowledge of programing.
+We are Bibliomundi, an ebook distributor and have made this api with the purpose of integrating our ebooks with your store's platform. In order to commercialize our ebooks at your store, it does require knowledge of programing.
 OBS: This API requires knowledge of PHP coding. In case you work with other coding standards, we have published the complete webservice which may be accessed through this <a href="https://drive.google.com/file/d/0BzwFNhJ9FBNwS0JCSzA3cXFPYUk/view">link</a>.
 
 
 # Requirements
 - <a href="http://php.net/manual/en/book.curl.php" target="blank">cURL</a>
-- <a href="http://php.net/" target="blank">PHP 5.5</a>
+- <a href="http://php.net/" target="blank">PHP >= 5.6</a>
 - Knowledge of <a href="http://www.editeur.org/83/Overview/" target="blank">Onix</a>
 - Key and Secret. If you do not possess these credentials, please contact us at contato@bibliomundi.com.br.
 
@@ -143,7 +143,7 @@ $purchase->setCustomer($customer);
 Then insert the ebook by adding its ID and Price and then inform the currency.
 <pre>$purchase->addItem($ebookID, $ebookPrice, 'USD');</pre>
 
-Check href="https://github.com/bibliomundi/client-side-api/blob/master/currency.md">here<a/> the full list.
+Check <a href="https://github.com/bibliomundi/client-side-api/blob/master/currency.md">here<a/> the full list.
 
 OBS: You may add as many ebooks as necessary by simply repeating the procedure.
 
@@ -207,6 +207,52 @@ catch(\BBM\Server\Exception $e)
 If everything runs smoothly, as you request the download() function, the ebook file will be automatically downloaded to the consumer´s gadget since it is an Endpoint.
 
 For more details, se the following example <a href="https://github.com/bibliomundi/client-side-api/tree/master/lib/BBM/examples/download.php">aqui<a/>.
+
+# Refund a Purchase (Work in Progress)
+Sometimes your customer may want to request a refund and doing so, your store needs to send us the request. 
+
+You only need three fields.
+| field           	| type   	| required 	| description                                                                    	|   	|
+|-----------------	|--------	|----------	|--------------------------------------------------------------------------------	|---	|
+| transaction_key 	| string 	| yes      	| the transaction key you sent us when you created the purchase through our API  	|   	|
+| ebook_ids       	| array  	| yes      	| an array containing the ids of the ebooks you want to refund from the purchase 	|   	|
+| refund_reason   	| string 	| yes      	| the reason why the refund is being requested                                   	|   	|
+
+Here's a code sample.
+<pre>
+$sale_reverser = new BBM\RefundPurchase(CLIENT_ID, CLIENT_SECRET);
+
+$data = [
+    'transaction_key' => 'MY_STORE_TRANSACTION',
+    'ebook_ids' => [/*ebook_ids from the transaction*/],
+    'refund_reason' => "Reason for the refund"
+];
+
+$response = $sale_reverser->requestRefund();
+</pre>
+### The Response
+In the response, you will receive an associative array where the keys are each one of ebook_ids you sent into the request.
+| field   	| type    	| description                                                            	|
+|---------	|---------	|------------------------------------------------------------------------	|
+| code    	| integer 	| internal response code regarding the action of execution of the refund 	|
+| message 	| string  	| the message of the execution of the refund                             	|
+
+There are two cases where the refund will be automatically accepted:
+- was requested within period demanded by law(seven days);
+- the store and the ebooks's imprint belong to the same company.
+
+Otherwise, the request will be sent to the imprint and you will have to wait for their approval.
+
+### The Message Codes
+| code 	| message                                                        	|
+|------	|----------------------------------------------------------------	|
+| -1   	| Ebook was not found in this transaction                        	|
+| 0    	| Refund has already been refused(reason will be in the message) 	|
+| 1    	| Refund has already been sent to imprint's analysis             	|
+| 2    	| Refund has already been approved                               	|
+| 3    	| Refund has been sent to imprint's analysis                     	|
+| 4    	| Refund has automatically been approved                         	|
+| 5    	| Refund has automatically been refused                          	|
 
 # Errors
 Errors may occur at all stages (Complete, Update, Validate, Checkout and Download) and will be of your responsibility to treat them and inform to the user if it is the case. Regardless of the requisition which is being made, we always return an Exception with information about the error. You may check the errors list and their respective stages <a href="https://github.com/bibliomundi/client-side-api/blob/master/errors.md" target="blank">here</a>. We have also made available the <a href="https://github.com/bibliomundi/client-side-api/tree/master/docs/" target="blank">documentation</a> generated by <a target="blank" href="http://www.phpdoc.org/" target="blank">PHPDoc.</a>
