@@ -18,7 +18,7 @@ $data = [
 
 try {
     $sale_reverser->validate($data); // validate the fields
-    $sale_reverser->requestRefund(); // send the refund request
+    var_dump($sale_reverser->requestRefund()); // send the refund request
 } catch (\BBM\Server\Exception $e) {
     die($e->getMessage());
 }

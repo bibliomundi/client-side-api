@@ -78,6 +78,7 @@ class RefundPurchase extends Connect
 
         try {
             $request->execute();
+            return $request->getResponse();
         } catch (Exception $e) {
             throw new Exception($e->getMessage(), $e->getCode());
         }
