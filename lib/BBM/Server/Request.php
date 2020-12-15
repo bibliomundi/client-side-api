@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Created by Bibliomundi.
  * User: Victor Martins
@@ -117,8 +118,7 @@ class Request
     {
         $this->authentication = $y;
 
-        if($auth_name && $auth_pass)
-        {
+        if ($auth_name && $auth_pass) {
             $this->setName($auth_name);
             $this->setPass($auth_pass);
         }
@@ -150,7 +150,7 @@ class Request
      * @param bool $includeHeader
      * @param bool $noBody
      */
-    public function __construct($url, $verbose = false,$followlocation = true,$timeOut = 30,$maxRedirecs = 4,$binaryTransfer = false,$includeHeader = false,$noBody = false)
+    public function __construct($url, $verbose = false, $followlocation = true, $timeOut = 30, $maxRedirecs = 4, $binaryTransfer = false, $includeHeader = false, $noBody = false)
     {
         $this->_url = $url;
         $this->_followlocation = $followlocation;
@@ -167,16 +167,15 @@ class Request
      */
     public function setPost($postFields)
     {
-        $post = '';
+        $post = [];
         $this->_post = 1;
         $this->_postFields = $postFields;
 
-        if($this->verbose)
+        if ($this->verbose)
             var_dump("POST FIELDS: ", $postFields);
 
-        foreach($this->_postFields as $field => $value)
-        {
-            if(is_array($value))
+        foreach ($this->_postFields as $field => $value) {
+            if (is_array($value))
                 continue;
 
             $post[] = "$field=$value";
@@ -192,36 +191,30 @@ class Request
     public function create()
     {
         $this->curlHandler = curl_init();
-
-        curl_setopt($this->curlHandler,CURLOPT_URL,$this->_url);
-        curl_setopt($this->curlHandler,CURLOPT_HTTPHEADER,array('Content-Type: application/x-www-form-urlencoded'));
-        curl_setopt($this->curlHandler,CURLOPT_TIMEOUT,$this->_timeout);
-        curl_setopt($this->curlHandler,CURLOPT_MAXREDIRS,$this->_maxRedirects);
-        curl_setopt($this->curlHandler,CURLOPT_RETURNTRANSFER,true);
-        curl_setopt($this->curlHandler,CURLOPT_FOLLOWLOCATION,$this->_followlocation);
-
-        if($this->authentication)
-        {
-            curl_setopt($this->curlHandler, CURLOPT_USERPWD, $this->auth_name.':'.$this->auth_pass);
+        curl_setopt($this->curlHandler, CURLOPT_URL, $this->_url);
+        curl_setopt($this->curlHandler, CURLOPT_HTTPHEADER, array('Content-Type: application/x-www-form-urlencoded'));
+        curl_setopt($this->curlHandler, CURLOPT_TIMEOUT, $this->_timeout);
+        curl_setopt($this->curlHandler, CURLOPT_MAXREDIRS, $this->_maxRedirects);
+        curl_setopt($this->curlHandler, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($this->curlHandler, CURLOPT_FOLLOWLOCATION, $this->_followlocation);
+        if ($this->authentication) {
+            curl_setopt($this->curlHandler, CURLOPT_USERPWD, $this->auth_name . ':' . $this->auth_pass);
         }
-
-        if($this->_includeHeader)
-        {
-            curl_setopt($this->curlHandler,CURLOPT_HEADER,true);
+        if ($this->_includeHeader) {
+            curl_setopt($this->curlHandler, CURLOPT_HEADER, true);
         }
-
-        if($this->_noBody)
-        {
-            curl_setopt($this->curlHandler,CURLOPT_NOBODY,true);
+        if ($this->_noBody) {
+            curl_setopt($this->curlHandler, CURLOPT_NOBODY, true);
         }
-
-        if($this->_binaryTransfer)
-        {
-            curl_setopt($this->curlHandler,CURLOPT_BINARYTRANSFER,true);
+        if ($this->_binaryTransfer) {
+            curl_setopt($this->curlHandler, CURLOPT_BINARYTRANSFER, true);
         }
-
-        curl_setopt($this->curlHandler,CURLOPT_USERAGENT, $_SERVER['HTTP_USER_AGENT']);
-        curl_setopt($this->curlHandler,CURLOPT_REFERER, $_SERVER['SERVER_NAME']);
+        if (isset($_SERVER['HTTP_USER_AGENT'])) {
+            curl_setopt($this->curlHandler, CURLOPT_USERAGENT, $_SERVER['HTTP_USER_AGENT']);
+        }
+        if (isset($_SERVER['SERVER_NAME'])) {
+            curl_setopt($this->curlHandler, CURLOPT_REFERER, $_SERVER['SERVER_NAME']);
+        }
     }
 
     /**
@@ -229,19 +222,19 @@ class Request
      */
     public function execute()
     {
-        if($this->verbose)
+        if ($this->verbose)
             var_dump("SENDING REQUEST TO: ", $this->_url);
 
         $this->_return = curl_exec($this->curlHandler);
         $this->_readableReturn = json_decode($this->_return, true);
 
-        $this->_status = curl_getinfo($this->curlHandler,CURLINFO_HTTP_CODE);
+        $this->_status = curl_getinfo($this->curlHandler, CURLINFO_HTTP_CODE);
         curl_close($this->curlHandler);
 
-        if($this->verbose)
+        if ($this->verbose)
             var_dump("RETURN: ", $this->_return);
 
-        if($this->isSuccessfullRequest())
+        if ($this->isSuccessfullRequest())
             return $this->_return;
         else
             throw new Exception($this->getResponse(), $this->getHttpStatus());

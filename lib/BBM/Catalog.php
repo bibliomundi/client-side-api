@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Created by Bibliomundi.
  * User: Victor Martins
@@ -68,7 +69,7 @@ class Catalog extends Connect
      */
     public function __construct($clientId, $clientSecret, $scope = 'complete')
     {
-        if(!in_array($scope, SysConfig::$ACCEPTED_SCOPES))
+        if (!in_array($scope, SysConfig::$ACCEPTED_SCOPES))
             throw new Exception('Invalid Scope', 400);
 
         $this->scope = $scope;
@@ -85,8 +86,7 @@ class Catalog extends Connect
     {
         $this->data = ['transaction_time' => time()];
 
-        try
-        {
+        try {
             // IF NO EXCEPTION IS THROWN BEFORE, THE REQUEST CAN BE SENT, SO
             // HERE WE GET THE ACCESS TOKEN FOR THIS DOWNLOAD REQUEST.
             $request = new Server\Request(Server\Config\SysConfig::$BASE_CONNECT_URI[$this->environment] . 'token.php', $this->verbose);
@@ -95,7 +95,7 @@ class Catalog extends Connect
             $request->setPost(['grant_type' => Server\Config\SysConfig::$GRANT_TYPE, 'environment' => $this->environment]);
             $response = json_decode($request->execute());
 
-            if(!isset($response->access_token))
+            if (!isset($response->access_token))
                 throw new Exception('Cannot get the access token');
 
             // SET THE ACCESS TOKEN TO THE NEXT REQUEST DATA.
@@ -103,9 +103,7 @@ class Catalog extends Connect
             $this->data['client_id'] = $this->clientId;
             $this->data['scope'] = $this->scope;
             $this->data['environment'] = $this->environment;
-        }
-        catch(Exception $e)
-        {
+        } catch (Exception $e) {
             throw $e;
         }
 
@@ -133,49 +131,47 @@ class Catalog extends Connect
      * @param array $filters
      * @throws Exception
      */
-    public function filters(Array $filters)
+    public function filters(array $filters)
     {
-        if($this->verbose)
+        if ($this->verbose)
             var_dump("FILTER VALIDATION: ", $filters);
 
         // VALIDATE EACH FILTER VALUE
-        foreach($filters as $filter => $value)
-        {
+        foreach ($filters as $filter => $value) {
             // VERIFY IF THAT SPECIFIC FILTER IS IN THE CONFIGURATIONS
-            if(!in_array($filter, Server\Config\SysConfig::$ACCEPTED_FILTERS))
+            if (!in_array($filter, Server\Config\SysConfig::$ACCEPTED_FILTERS))
                 throw new Exception('The applied filter is not acceptable');
 
             // VERIFY THE VALUES ACCEPTANCE, THIS WILL BE RE-VALIDATED IN THE BACKEND.
-            switch($filter)
-            {
-                // IF YES, ONLY WILL RETURN DRM PROTECTED EBOOKS
-                // IF FALSE, ONLY WILL RETURN UNPROTECTED EBOOKS
+            switch ($filter) {
+                    // IF YES, ONLY WILL RETURN DRM PROTECTED EBOOKS
+                    // IF FALSE, ONLY WILL RETURN UNPROTECTED EBOOKS
                 case 'drm':
-                    if(!in_array($value, ['yes', 'no']))
+                    if (!in_array($value, ['yes', 'no']))
                         throw new Exception('The DRM filter must be "yes" or "no"');
                     break;
 
-                // IT'S HIGHLY RECOMMENDED THAT YOU ONLY SET ONE OF THIS
-                // TO KEEP THE SAME RATIO IN THE IMAGE.
+                    // IT'S HIGHLY RECOMMENDED THAT YOU ONLY SET ONE OF THIS
+                    // TO KEEP THE SAME RATIO IN THE IMAGE.
                 case 'image_width':
                 case 'image_height':
                 case 'per_page':
                 case 'page':
-                    if(!is_int($value))
+                    if (!is_int($value))
                         throw new Exception('The image size must be an integer');
                     break;
                 case 'imprint_id':
-                    if(!is_int($value))
+                    if (!is_int($value))
                         throw new Exception('The imprint id must be an integer');
                     break;
                 case 'catalog_format':
-                    if(!in_array($value, ['xml', 'json']))
+                    if (!in_array($value, ['xml', 'json']))
                         throw new Exception('The Catalog format must be "xml" or "json"');
                     break;
             }
         }
 
-        if($this->verbose)
+        if ($this->verbose)
             var_dump("FILTER ADDED: ", $filters);
 
         $this->filter = $filters;
@@ -196,22 +192,18 @@ class Catalog extends Connect
         $request->create();
 
         // IF HAS FILTERS, ADD THEN TO THE POST
-        if(isset($this->filter))
+        if (isset($this->filter))
             $this->data['filter']['items'] = $this->filter;
 
         $request->setPost($this->data);
 
-        try
-        {
+        try {
             // SEND IT, IF OKAY, THE __TOSTRING WILL BE THE ONIX XML RESPONSE
             $request->execute();
-        }
-        catch(Exception $e)
-        {
+        } catch (Exception $e) {
             throw new Exception($e->getMessage(), $e->getCode());
         }
 
         return $request->__toString();
     }
-
 }

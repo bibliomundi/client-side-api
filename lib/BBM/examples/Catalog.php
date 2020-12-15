@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Created by Bibliomundi.
  * User: Victor Martins
@@ -28,7 +29,7 @@
  */
 
 // NEW INSTANCE OF THE CATALOG. EVERY NEW LIST MUST BE A NEW INSTANCE.
-$catalog = new BBM\Catalog('93c9e430729c27158b10e0279587a771826de371', '1a8ae8a7715c9d12f466fb9ae23fc34ca9556849', 'updates');
+$catalog = new BBM\Catalog(CLIENT_ID, CLIENT_SECRET, 'complete');
 
 /////////////////////////////////////////////////
 //                  NOTICE                     //
@@ -41,7 +42,7 @@ $catalog = new BBM\Catalog('93c9e430729c27158b10e0279587a771826de371', '1a8ae8a7
  * Server environment that you want to use: sandbox or production.
  * Default: 'sandbox'
  */
-$catalog->environment = 'development';
+$catalog->environment = BBM_API_ENV;
 
 /*
  * VERBOSE
@@ -50,7 +51,7 @@ $catalog->environment = 'development';
  */
 
 // UNCOMMENT THIS CODE TO ACTIVATE THE VERBOSE MODE
-$catalog->verbose(true);
+$catalog->verbose(VERBOSE);
 
 /*
  * FILTERS
@@ -82,21 +83,15 @@ $catalog->verbose(true);
  *      $catalog->filters( array('image_height' => 1100, 'drm' => 'no') ); // THIS CODE WILL PRODUCE: ONLY UNPROTECTED EBOOKS AND WITH 1100px OF HEIGHT ON THE COVER
  */
 // UNCOMMENT TO USE (USE IT CAREFULLY!):
-$catalog->filters(['catalog_from' => '2019-10-24', 'catalog_to' => '2019-10-30']);
+//$catalog->filters([]);
 
-try
-{
+try {
     $catalog->validate();
     $xml = $catalog->get(); // GET THE ONIX XML STRING, YOU CAN ECHO OR EXIT THIS STRING
-                            // BUT IS RECOMMENDED THAT YOU USE SOME XML PARSER TO INSERT THIS
-                            // INTO YOUR DATABASE.
-}
-catch(\BBM\Server\Exception $e)
-{
+    // BUT IS RECOMMENDED THAT YOU USE SOME XML PARSER TO INSERT THIS
+    // INTO YOUR DATABASE.
+} catch (\BBM\Server\Exception $e) {
     throw $e;
 }
-
-
-
 // header('Content-Type: application/json; charset=utf-8');
 echo $xml;

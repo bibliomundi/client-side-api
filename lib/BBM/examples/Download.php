@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Created by Bibliomundi.
  * User: Victor Martins
@@ -28,13 +29,13 @@
  */
 
 // NEW INSTANCE OF THE DOWNLOAD. EVERY NEW DOWNLOAD MUST BE A NEW INSTANCE.
-$download = new BBM\Download('YOUR_APY_KEY', 'YOUR_API_SECRET');
+$download = new BBM\Download(CLIENT_ID, CLIENT_SECRET);
 
 /*
  * Server environment that you want to use: sandbox or production.
  * Default: 'sandbox'
  */
-$download->environment = 'sandbox';
+$download->environment = BBM_API_ENV;
 
 /*
  * Verbose (true|false), enable this option and a full output will be shown.
@@ -42,7 +43,7 @@ $download->environment = 'sandbox';
  */
 
 // UNCOMMENT THIS CODE TO ACTIVATE THE VERBOSE MODE
-//$download->verbose(true);
+$download->verbose(VERBOSE);
 
 $data = [
     'ebook_id' => $EBOOKID, // YOU MUST 1 TO TEST, ANYONE MORE WILL BE COUNT AS AN ACTUAL DOWNLOAD.
@@ -54,13 +55,10 @@ $data = [
  * IF YOU WANT TO HANDLE THE ERRORS, USE TRY/CATCH AS BELOW:
  */
 
-try
-{
+try {
     $download->validate($data); // VALIDATE THE DOWNLOAD
     $download->download(); // TRY TO DOWNLOAD THE FILE
-}
-catch(\BBM\Server\Exception $e)
-{
+} catch (\BBM\Server\Exception $e) {
     // HERE YOU CAN HANDLE THE ERROR AS YOU WANT TO.
     // EXAMPLE:
     die($e->getMessage());

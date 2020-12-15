@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Created by Bibliomundi.
  * User: Victor Martins
@@ -38,7 +39,8 @@ $classes = [
     'BBM\Server\Request',
     'BBM\Download',
     'BBM\Catalog',
-    'BBM\Purchase'
+    'BBM\Purchase',
+    'BBM\RefundPurchase'
 ];
 
 /**
@@ -60,7 +62,6 @@ function autoload($className)
     require $fileName;
 }
 
-foreach($classes as $class)
-{
+foreach ($classes as $class) {
     autoload($class);
 }
