@@ -150,7 +150,7 @@ class Request
      * @param bool $includeHeader
      * @param bool $noBody
      */
-    public function __construct($url, $verbose = false, $followlocation = true, $timeOut = 30, $maxRedirecs = 4, $binaryTransfer = false, $includeHeader = false, $noBody = false)
+    public function __construct($url, $verbose = false, $followlocation = true, $timeOut = 180, $maxRedirecs = 4, $binaryTransfer = false, $includeHeader = false, $noBody = false)
     {
         $this->_url = $url;
         $this->_followlocation = $followlocation;
@@ -226,9 +226,16 @@ class Request
             var_dump("SENDING REQUEST TO: ", $this->_url);
 
         $this->_return = curl_exec($this->curlHandler);
+
+        $error = curl_error($this->curlHandler);
+        $this->_status = curl_getinfo($this->curlHandler, CURLINFO_HTTP_CODE);
+        if ($error) throw new \Exception($error, $this->_status);
+
+
         $this->_readableReturn = json_decode($this->_return, true);
 
-        $this->_status = curl_getinfo($this->curlHandler, CURLINFO_HTTP_CODE);
+
+
         curl_close($this->curlHandler);
 
         if ($this->verbose)
