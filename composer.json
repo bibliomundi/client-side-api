@@ -1,5 +1,5 @@
 {
-    "name": "magrao/client-side-api",
+    "name": "bibliomundi/client-side-api",
     "type": "library",
     "description": "Request handler for Bibliomundi authorized clients.",
     "keywords": ["bibliomundi"],
@@ -7,9 +7,9 @@
     "license": "MIT",
     "authors": [
         {
-            "name": "Carlos Magno",
-            "email": "carlos.magno@bibliomundi.com.br",
-            "homepage": "http://bibliomundi.com.br",
+            "name": "Bibliomundi Developers",
+            "email": "dev@bibliomundi.com.br",
+            "homepage": "https://bibliomundi.com.br",
             "role": "Developer"
         }
     ],
