@@ -43,7 +43,7 @@ $purchase->environment = BBM_API_ENV;
  */
 
 // UNCOMMENT THIS CODE TO ACTIVATE THE VERBOSE MODE
-$purchase->verbose(true);
+$purchase->verbose(VERBOSE);
 
 // CUSTOMER DATA ARRAY
 $customer = [
@@ -63,8 +63,7 @@ $purchase->setCustomer($customer);
 // ADD A NEW EBOOK, EVERY NEW EBOOK MUST BE ADDED AGAIN.
 // IF YOU WANT TO ADD A SINGLE BOOK, YOU CAN USE.
 // addItem(EBOOK_ID, PRICE, CURRENCY);
-$purchase->addItem(11260, 0.0, 'BRL');
-// $purchase->addItem(11212, 1, 'BRL');
+$purchase->addItem(11212, 1, 'BRL');
 // $purchase->addItem(895, 1, 'BRL');
 // $purchase->addItem(294, 1, 'BRL');
 

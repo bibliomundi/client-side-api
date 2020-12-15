@@ -43,7 +43,7 @@ $download->environment = BBM_API_ENV;
  */
 
 // UNCOMMENT THIS CODE TO ACTIVATE THE VERBOSE MODE
-//$download->verbose(true);
+$download->verbose(VERBOSE);
 
 $data = [
     'ebook_id' => $EBOOKID, // YOU MUST 1 TO TEST, ANYONE MORE WILL BE COUNT AS AN ACTUAL DOWNLOAD.

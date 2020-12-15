@@ -51,7 +51,7 @@ $catalog->environment = BBM_API_ENV;
  */
 
 // UNCOMMENT THIS CODE TO ACTIVATE THE VERBOSE MODE
-$catalog->verbose(true);
+$catalog->verbose(VERBOSE);
 
 /*
  * FILTERS

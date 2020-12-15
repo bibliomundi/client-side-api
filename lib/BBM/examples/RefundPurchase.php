@@ -4,16 +4,16 @@ $sale_reverser = new BBM\RefundPurchase(CLIENT_ID, CLIENT_SECRET);
 $sale_reverser->environment = BBM_API_ENV;
 
 // UNCOMMENT THIS CODE TO ACTIVATE THE VERBOSE MODE
-$sale_reverser->verbose(true);
+$sale_reverser->verbose(VERBOSE);
 
-$transaction_key = 'MANUAL_4_1605812866';
+$transaction_key = 'MY_STORE_TESTS_1608050783';
 
-$ids = [1065];
+$ebook_ids = [0];
 
 $data = [
-    'ebook_ids' => $ids,
+    'ebook_ids' => $ebook_ids,
     'transaction_key' => $transaction_key,
-    'refund_reason' => "The reason to request the refund"
+    'refund_reason' => "Reason for the refund"
 ];
 
 try {

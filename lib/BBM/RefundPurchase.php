@@ -1,47 +1,10 @@
 <?php
 
-/**
- * Created by Bibliomundi.
- * User: Victor Martins
- * Contact: victor.martins@bibliomundi.com.br
- * Site: http://bibliomundi.com.br
- *
- * The MIT License (MIT)
- * Copyright (c) 2015 bibliomundi
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
- */
-
 namespace BBM;
 
 use BBM\Server\Connect;
 use BBM\Server\Exception;
 
-/**
- * Class Download
- * Used to execute the download of the desired ebook from the Bibliomundi Server.
- * Uses cURL as method to send and recive the information, you can use the example to
- * learn how to use.
- *
- * @see https://github.com/bibliomundi/client-side-api/blob/master/lib/BBM/examples/download.php
- * @package BBM
- */
 class RefundPurchase extends Connect
 {
     /**
@@ -63,7 +26,7 @@ class RefundPurchase extends Connect
 
         try {
             $this->validateData();
-            $request = new Server\Request(Server\Config\SysConfig::$BASE_CONNECT_URI . 'token.php', $this->verbose);
+            $request = new Server\Request(Server\Config\SysConfig::$BASE_CONNECT_URI[$this->environment] . 'token.php', $this->verbose);
             $request->authenticate(true, $this->clientId, $this->clientSecret);
             $request->create();
             $request->setPost(['grant_type' => Server\Config\SysConfig::$GRANT_TYPE, 'environment' => $this->environment]);
@@ -87,28 +50,33 @@ class RefundPurchase extends Connect
     private function validateData()
     {
         // REQUIRED DATA
-        if (!isset($this->data['ebook_id'], $this->data['transaction_key']))
-            throw new Exception('ebooks_id ou transaction_key são inválidos', 422);
+
+        if (!isset($this->data['ebook_ids']) || !(is_array($this->data['ebook_ids']) && count($this->data['ebook_ids']))) {
+            throw new Exception("ebook_ids precisa de ser uma array com id de ebooks referente à compra", 422);
+        }
+
+        if (!isset($this->data['transaction_key']))
+            throw new Exception('transaction_key está faltando na requisição', 422);
+
+        if (!isset($this->data['refund_reason']) && !empty($this->data['refund_reason']))
+            throw new Exception('refund_reason é obrigatório para o envio do estorno', 422);
 
         // SET THE CLIENT_ID TO THE REQUEST
         $this->data['client_id'] = $this->clientId;
+        $this->data['refund_reason'] = urlencode($this->data['refund_reason']);
     }
 
     /**
-     * Execute the request to get the ebook binary string, in case of success, the file
-     * will be outputed and forced to download.
      * @throws Exception
      */
     public function requestRefund()
     {
-        // GENERATE THE CURL HANDLER
-        $request = new Server\Request(Server\Config\SysConfig::$BASE_CONNECT_URI . Server\Config\SysConfig::$BASE_SALE . 'refund.php', $this->verbose);
+        $request = new Server\Request(Server\Config\SysConfig::$BASE_CONNECT_URI[$this->environment] . Server\Config\SysConfig::$BASE_SALE . 'refund.php', $this->verbose);
         $request->authenticate(false);
         $request->create();
         $request->setPost($this->data);
 
         try {
-            // SEND IT, IF OKAY, THE __TOSTRING WILL BE THE EBOOK BINARY STRING
             $request->execute();
         } catch (Exception $e) {
             throw new Exception($e->getMessage(), $e->getCode());
