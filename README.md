@@ -171,43 +171,6 @@ OBS..
 - Do not sell the ebook to your customer without validating with us first,because there are conditions which may invalidate the sale such as your store not being active or issues with the ebook.
 - Do not forget to confirm the checkout with us and you must only do so once the payment is confirmed with your client.
 
-# Step 5 - Download
-Once your customer has purchased one of our ebooks, you validated the transaction and made the checkout, they will be able to download the ebook. It will be your decision the way in which to make the link (or similar) available for your client to make the download. With us, all you need to download the ebook is inform us the transaction ID (the same used at the checkout) and the ebook´s ID.
-
-Instance the download class by delivering your credentials as parameters.
-<pre>$download = new BBM\Download('YOUR_APY_KEY', 'YOUR_API_SECRET');</pre>
-
-Select the environment.
-<pre>
-$catalog->environment = 'production';
-ou
-$catalog->environment = 'sandbox';
-</pre>
-
-<pre>
-$data = [
-    'ebook_id' => $EBOOKID,
-    'transaction_time' => time(),
-    'transaction_key' => $TIMESTAMP // The key you have used to confirm the checkout
-];
-</pre>
-
-<pre>
-try
-{
-    $download->validate($data);
-    $download->download();// Faz o download do ebook
-}
-catch(\BBM\Server\Exception $e)
-{
-    var_dump($e);
-}
-</pre>
-
-If everything runs smoothly, as you request the download() function, the ebook file will be automatically downloaded to the consumer´s gadget since it is an Endpoint.
-
-For more details, se the following example <a href="https://github.com/bibliomundi/client-side-api/tree/master/lib/BBM/examples/download.php">aqui<a/>.
-
 # Refund a Purchase (Work in Progress)
 Sometimes your customer may want to request a refund and doing so, your store needs to send us the request. 
 
